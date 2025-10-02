@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Frutos del Paraíso</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Encabezado -->
+  <header>
+    <h1>🥭 FRUTOS DEL PARAÍSO  🍓</h1>
+    <p>Yogurt griego artesanal, saludable y delicioso</p>
+    <nav>
+      <a href="#productos">Productos</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+  </header>
+
+  <!-- Sección productos -->
+  <section id="productos">
+    <h2>Nuestros Productos</h2>
+    <div class="productos-container" id="productos-container">
+      <!-- Aquí se cargarán automáticamente los productos desde Google Sheets -->
+    </div>
+  </section>
+
+  <!-- Sección contacto -->
+  <section id="contacto">
+    <h2>Contáctanos</h2>
+    <p>Haz tus pedidos directamente:</p>
+    <a href="https://wa.me/573005970933?text=Hola%20vengo%20de%20la%20página%20web%20Frutos%20del%20Paraíso%20y%20quiero%20información%20de%20los%20productos."
+       target="_blank" class="btn-whatsapp">
+      📲 Pedir por WhatsApp
+    </a>
+    <p>Síguenos en Instagram: 
+      <a href="https://instagram.com/" target="_blank">@frutosdelparaiso</a>
+    </p>
+    <p>Síguenos en Facebook: 
+      <a href="https://facebook.com/" target="_blank">@frutosdelparaiso</a>
+    </p>
+  </section>
+
+  <h3>O escríbenos aquí:</h3>
+  <form action="https://formspree.io/f/mnngvqgk" method="POST" class="contact-form">
+    <input type="text" name="nombre" placeholder="Tu nombre" required>
+    <p></p>
+    <input type="email" name="email" placeholder="Tu correo" required>
+    <p></p>
+    <textarea name="mensaje" placeholder="Escribe tu mensaje aquí..." required></textarea>
+    <p></p>
+    <button type="submit">Enviar mensaje</button>
+  </form>
+
+  <footer>
+    <p>&copy; 2025 Frutos del Paraíso - Todos los derechos reservados</p>
+  </footer>
+
+  <!-- Script para traer productos desde Google Sheets -->
+  <script>
+    async function cargarProductos() {
+      const url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS5ZpG2UqL8h_RZMxz44H_OaNZ38W-l9RCB_iqpb0bNOU42yHprW0i8A4g2c3mYZSoQJNd_0IxScpWC/pub?output=csv";
+      
+      const response = await fetch(url);
+      const data = await response.text();
+      const rows = data.split("\n").slice(1); // Saltamos los encabezados
+      const contenedor = document.getElementById("productos-container");
+      contenedor.innerHTML = ""; // Limpiar antes de cargar
+
+      rows.forEach(row => {
+        const cols = row.split(",");
+        if (cols.length >= 4) {
+          const [nombre, descripcion, precio, imagen] = cols;
+
+          const productoHTML = `
+            <div class="producto">
+              <img src="${imagen.trim()}" alt="${nombre}">
+              <h3>${nombre}</h3>
+              <p>${descripcion}</p>
+              <span>${precio}</span>
+              <a href="https://wa.me/573005970933?text=Hola%20vengo%20de%20la%20página%20Frutos%20del%20Paraíso%20y%20quiero%20${encodeURIComponent(nombre)}"
+                 target="_blank" class="btn-whatsapp">📲 Pedir este</a>
+            </div>
+          `;
+          contenedor.innerHTML += productoHTML;
+        }
+      });
+    }
+
+    cargarProductos();
+  </script>
+</body>
+</html>
