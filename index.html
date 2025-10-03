@@ -7,7 +7,7 @@
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto&display=swap" rel="stylesheet">
   <!-- CSS -->
-  <link rel="stylesheet" href="estilos.css">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="main-container">
@@ -43,19 +43,16 @@
       <p>Síguenos en Facebook: 
         <a href="https://facebook.com/" target="_blank">@frutosdelparaiso</a>
       </p>
-    </section>
 
-    <!-- Formulario de contacto -->
-    <h3>O escríbenos aquí:</h3>
-    <form action="https://formspree.io/f/mnngvqgk" method="POST" class="contact-form">
-      <input type="text" name="nombre" placeholder="Tu nombre" required>
-      <p></p>
-      <input type="email" name="email" placeholder="Tu correo" required>
-      <p></p>
-      <textarea name="mensaje" placeholder="Escribe tu mensaje aquí..." required></textarea>
-      <p></p>
-      <button type="submit">Enviar mensaje</button>
-    </form>
+      <!-- Formulario movido DENTRO de la sección contacto -->
+      <h3>O escríbenos aquí:</h3>
+      <form action="https://formspree.io/f/mnngvqgk" method="POST" class="contact-form">
+        <input type="text" name="nombre" placeholder="Tu nombre" required>
+        <input type="email" name="email" placeholder="Tu correo" required>
+        <textarea name="mensaje" placeholder="Escribe tu mensaje aquí..." required></textarea>
+        <button type="submit">Enviar mensaje</button>
+      </form>
+    </section>
 
     <!-- Footer -->
     <footer>

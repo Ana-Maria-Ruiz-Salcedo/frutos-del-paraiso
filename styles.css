@@ -1,4 +1,4 @@
-/* estilos.css - versión con fondo y decoración */
+/* estilos.css - versión corregida final */
 * {
   margin: 0;
   padding: 0;
@@ -16,7 +16,7 @@ body {
   position: relative;
 }
 
-/* Overlay para mejorar contraste del texto */
+/* Overlay CORREGIDO - ahora está detrás */
 body::before {
   content: "";
   position: fixed;
@@ -24,46 +24,58 @@ body::before {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(255, 255, 255, 0.6); /* blanco suave semitransparente */
-  z-index: 0;
+  background: rgba(255, 255, 255, 0.4);
+  z-index: -1;
+  pointer-events: none;
 }
 
-/* Contenedor principal centrado */
+/* Contenedor principal SIN centrado vertical */
 .main-container {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  padding: 0;
+  width: 100%;
   position: relative;
-  z-index: 1; /* para estar por encima del overlay */
-  padding: 2rem;
+  z-index: 1;
 }
 
-/* Para que se vea legible sobre el fondo */
-section, header, footer {
-  background: rgba(255, 248, 240, 0.9); /* transparencia suave */
+/* Secciones legibles */
+section {
+  background: rgba(255, 248, 240, 0.95);
   border-radius: 15px;
   padding: 2rem;
-  margin: 1rem auto;
+  margin: 2rem auto;
   max-width: 1100px;
-  position: relative;
-  z-index: 1; /* para quedar por encima del overlay */
+  width: 90%;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+section h2 {
+  color: #FF6B6B;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 /* Encabezado */
 header {
-  background: linear-gradient(135deg, rgba(255,107,107,0.9), rgba(255,217,61,0.9));
+  background: linear-gradient(135deg, rgba(255,107,107,0.95), rgba(255,217,61,0.95));
   color: #fff;
   text-align: center;
   padding: 2rem 1rem;
-  border-radius: 0 0 25px 25px;
+  border-radius: 0;
+  margin: 0;
+  width: 100%;
+  max-width: 100%;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
 header h1 {
   font-family: 'Pacifico', cursive;
   font-size: 2.5rem;
   margin-bottom: 0.5rem;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
 }
 
 header p {
@@ -71,21 +83,23 @@ header p {
   margin-bottom: 1rem;
 }
 
+header nav {
+  margin-top: 1rem;
+}
+
 header nav a {
   margin: 0 1rem;
   color: #fff;
   text-decoration: none;
   font-weight: bold;
-  transition: color 0.3s ease;
+  transition: all 0.3s ease;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
 }
 
 header nav a:hover {
+  background: rgba(255,255,255,0.2);
   color: #222;
-}
-
-/* Secciones */
-section {
-  text-align: center;
 }
 
 /* Productos */
@@ -93,38 +107,49 @@ section {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 1.5rem;
-  justify-content: center;
-  align-items: start;
+  margin-top: 1rem;
 }
 
 .producto {
-  border: none;
+  border: 2px solid #f0f0f0;
   border-radius: 15px;
-  padding: 1rem;
+  padding: 1.5rem;
   text-align: center;
   background: #fff;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  min-height: 400px;
+  transition: all 0.3s ease;
+  min-height: 420px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 .producto:hover {
   transform: translateY(-7px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  box-shadow: 0 8px 20px rgba(255, 107, 107, 0.3);
+  border-color: #FF6B6B;
 }
 
 .producto img {
   max-width: 100%;
-  border-radius: 8px;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: 12px;
   margin-bottom: 1rem;
 }
 
 .producto h3 {
   color: #FF6B6B;
   margin-bottom: 0.5rem;
+  font-size: 1.3rem;
+}
+
+.producto p {
+  color: #666;
+  font-size: 0.95rem;
+  margin: 0.5rem 0;
+  flex-grow: 1;
 }
 
 .producto span {
@@ -132,10 +157,10 @@ section {
   margin: 0.5rem 0;
   font-weight: bold;
   color: #27ae60;
-  font-size: 1.1rem;
+  font-size: 1.3rem;
 }
 
-/* Botón de WhatsApp y general */
+/* Botones */
 button, .btn-whatsapp {
   border-radius: 12px;
   padding: 12px 25px;
@@ -143,27 +168,51 @@ button, .btn-whatsapp {
   cursor: pointer;
   transition: all 0.3s ease;
   text-decoration: none;
+  display: inline-block;
+  border: none;
 }
 
 button {
   background: #FF6B6B;
   color: #fff;
-  border: none;
 }
 
 button:hover {
   background-color: #e85c4a;
   transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.4);
 }
 
 .btn-whatsapp {
   background: #25d366;
   color: #fff !important;
+  margin: 0.5rem;
 }
 
 .btn-whatsapp:hover {
   background: #1ebe57;
   transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
+}
+
+/* Sección de contacto */
+#contacto {
+  text-align: center;
+}
+
+#contacto p {
+  margin: 1rem 0;
+  font-size: 1.1rem;
+}
+
+#contacto a {
+  color: #FF6B6B;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+#contacto a:hover {
+  text-decoration: underline;
 }
 
 /* Formulario de contacto */
@@ -172,32 +221,52 @@ button:hover {
   margin: 1rem auto;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  width: 90%;
 }
 
 .contact-form input,
 .contact-form textarea {
   width: 100%;
   margin-bottom: 1rem;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  padding: 12px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  outline: none;
+  border-color: #FF6B6B;
+}
+
+.contact-form textarea {
+  min-height: 120px;
+  resize: vertical;
 }
 
 .contact-form button {
   margin-top: 0.5rem;
+  width: 100%;
 }
 
 /* Footer */
 footer {
   text-align: center;
-  padding: 1rem;
-  background: rgba(34,34,34,0.9);
+  padding: 1.5rem;
+  background: rgba(34, 34, 34, 0.95);
   color: #fff;
   margin-top: 2rem;
-  border-radius: 15px 15px 0 0;
-  position: relative;
-  z-index: 1;
+  width: 100%;
+}
+
+footer p {
+  margin: 0;
 }
 
 /* Responsive */
@@ -206,9 +275,22 @@ footer {
     grid-template-columns: 1fr;
   }
 
+  header h1 {
+    font-size: 2rem;
+  }
+
   header nav {
     display: flex;
     flex-direction: column;
     gap: 10px;
+  }
+
+  section {
+    width: 95%;
+    padding: 1.5rem;
+  }
+
+  .producto {
+    min-height: auto;
   }
 }
