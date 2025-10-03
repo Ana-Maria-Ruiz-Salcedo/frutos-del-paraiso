@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contáctanos - Frutos del Paraíso</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>🥭 FRUTOS DEL PARAÍSO 🍓</h1>
+    <nav>
+      <a href="index.html">Inicio</a>
+      <a href="sobre-nosotros.html">Sobre Nosotros</a>
+      <a href="contacto.html">Contáctanos</a>
+      <a href="carrito.html">Carrito 🛒 (<span id="cart-count">0</span>)</a>
+    </nav>
+  </header>
+
+  <section id="contacto">
+    <h2>Contáctanos</h2>
+    <p>Haz tus pedidos directamente:</p>
+    <a href="https://wa.me/573005970933?text=Hola%20vengo%20de%20la%20página%20web%20Frutos%20del%20Paraíso%20y%20quiero%20información%20de%20los%20productos."
+       target="_blank" class="btn-whatsapp">
+      📲 Pedir por WhatsApp
+    </a>
+    <p>Síguenos en Instagram: 
+      <a href="https://instagram.com/" target="_blank">@frutosdelparaiso</a>
+    </p>
+    <p>Síguenos en Facebook: 
+      <a href="https://facebook.com/" target="_blank">@frutosdelparaiso</a>
+    </p>
+
+    <h3>O escríbenos aquí:</h3>
+    <form action="https://formspree.io/f/mnngvqgk" method="POST" class="contact-form">
+      <input type="text" name="nombre" placeholder="Tu nombre" required>
+      <input type="email" name="email" placeholder="Tu correo" required>
+      <textarea name="mensaje" placeholder="Escribe tu mensaje aquí..." required></textarea>
+      <button type="submit">Enviar mensaje</button>
+    </form>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 Frutos del Paraíso - Todos los derechos reservados</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

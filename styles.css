@@ -1,4 +1,4 @@
-/* estilos.css - versión corregida final */
+/* estilos.css - versión corregida final con botón verde en productos y botones + - ajustados */
 * {
   margin: 0;
   padding: 0;
@@ -160,8 +160,10 @@ header nav a:hover {
   font-size: 1.3rem;
 }
 
-/* Botones */
-button, .btn-whatsapp {
+/* Botón Añadir al carrito (verde) */
+.producto button {
+  background: #27ae60; /* Verde */
+  color: #fff;
   border-radius: 12px;
   padding: 12px 25px;
   font-weight: bold;
@@ -172,17 +174,32 @@ button, .btn-whatsapp {
   border: none;
 }
 
-button {
-  background: #FF6B6B;
-  color: #fff;
-}
-
-button:hover {
-  background-color: #e85c4a;
+.producto button:hover {
+  background-color: #219150; /* Verde más oscuro al pasar el mouse */
   transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.4);
+  box-shadow: 0 4px 12px rgba(39, 174, 96, 0.4);
 }
 
+/* Botones de cantidad ➕ y ➖ */
+.producto div button:nth-child(1),
+.producto div button:nth-child(3) {
+  background: transparent;
+  color: #27ae60;
+  border: 1px solid #27ae60;
+  padding: 4px 8px;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  margin: 0 3px;
+}
+
+.producto div button:nth-child(1):hover,
+.producto div button:nth-child(3):hover {
+  background: #27ae60;
+  color: #fff;
+  transform: scale(1.05);
+}
+
+/* Botón WhatsApp */
 .btn-whatsapp {
   background: #25d366;
   color: #fff !important;
