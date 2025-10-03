@@ -2,6 +2,9 @@
 const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS5ZpG2UqL8h_RZMxz44H_OaNZ38W-l9RCB_iqpb0bNOU42yHprW0i8A4g2c3mYZSoQJNd_0IxScpWC/pub?output=csv";
 const WHATSAPP_NUMBER = '573005970933'; // sin + ni espacios
 
+let cart = [];
+let total = 0;
+
 document.addEventListener("DOMContentLoaded", () => {
   loadProductsFromSheet();
 });
@@ -64,7 +67,7 @@ function renderProducts(products) {
   if (!container) return;
   container.innerHTML = '';
 
-  products.forEach(p => {
+  products.forEach((p, index) => {
     if (!p.name) return;
 
     // Filtrar productos no disponibles
@@ -73,12 +76,11 @@ function renderProducts(products) {
 
     // Imagen principal o fallback si no hay
     const imgSrc = (p.image_url && p.image_url !== '') ? p.image_url : 'img/fondo-yogurt.jpg';
-    const priceText = p.price ? `$${p.price}` : '';
+    const price = p.price ? parseFloat(p.price) : 0;
+    const priceText = price ? `$${price}` : '';
     const desc = p.description || '';
-    const whatsappMsg = encodeURIComponent(`Hola, vengo de la página Frutos del Paraíso y quiero información del producto: ${p.name}`);
-    const waHref = `https://wa.me/${WHATSAPP_NUMBER}?text=${whatsappMsg}`;
 
-    // HTML del producto con manejo de error en la imagen
+    // HTML del producto con carrito
     const html = `
       <div class="producto">
         <img src="${imgSrc}" alt="${escapeHtml(p.name)}"
@@ -87,7 +89,8 @@ function renderProducts(products) {
         <p>${escapeHtml(desc)}</p>
         <span>${escapeHtml(priceText)}</span>
         <div style="margin-top:10px;">
-          <a class="btn-whatsapp" target="_blank" href="${waHref}">📲 Consultar por WhatsApp</a>
+          <input type="number" id="qty-${index}" value="1" min="1" style="width:50px; text-align:center;">
+          <button onclick="addToCart('${escapeHtml(p.name)}', ${price}, 'qty-${index}')">🛒 Añadir</button>
         </div>
       </div>
     `;
@@ -104,4 +107,66 @@ function escapeHtml(str) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#039;');
+}
+
+/* ------------------ CARRITO ------------------ */
+
+// Añadir producto al carrito con cantidad
+function addToCart(name, price, qtyId) {
+  const qty = parseInt(document.getElementById(qtyId).value) || 1;
+
+  // Buscar si ya está en el carrito
+  const existing = cart.find(item => item.name === name);
+  if (existing) {
+    existing.qty += qty;
+  } else {
+    cart.push({ name, price, qty });
+  }
+
+  total += price * qty;
+  updateCart();
+  alert(`${name} (${qty} und) añadido al carrito ✅`);
+}
+
+// Eliminar producto del carrito
+function removeFromCart(index) {
+  total -= cart[index].price * cart[index].qty;
+  cart.splice(index, 1);
+  updateCart();
+}
+
+// Actualizar vista del carrito
+function updateCart() {
+  const cartList = document.getElementById("cart-list");
+  const cartCount = document.getElementById("cart-count");
+  const cartTotal = document.getElementById("cart-total");
+
+  cartList.innerHTML = "";
+  cart.forEach((item, i) => {
+    const li = document.createElement("li");
+    li.innerHTML = `
+      ${item.name} (x${item.qty}) - $${item.price * item.qty} 
+      <button style="margin-left:10px; background:red; color:white; border:none; padding:3px 6px; border-radius:5px; cursor:pointer;" 
+        onclick="removeFromCart(${i})">❌ Quitar</button>
+    `;
+    cartList.appendChild(li);
+  });
+
+  cartCount.textContent = cart.length;
+  cartTotal.textContent = `Total: $${total}`;
+}
+
+// Finalizar pedido
+function checkout() {
+  if (cart.length === 0) {
+    alert("Tu carrito está vacío");
+    return;
+  }
+
+  // Crear mensaje para WhatsApp con el pedido
+  const pedido = cart.map(p => `${p.name} x${p.qty} - $${p.price * p.qty}`).join("\n");
+  const mensaje = encodeURIComponent(`Hola, quiero hacer este pedido:\n${pedido}\n\nTotal: $${total}`);
+  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${mensaje}`, "_blank");
+
+  // 👉 Ya NO borramos el carrito aquí (se mantiene para seguir editando)
 }

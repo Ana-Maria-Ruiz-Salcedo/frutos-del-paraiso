@@ -16,16 +16,36 @@
       <h1>🥭 FRUTOS DEL PARAÍSO 🍓</h1>
       <p>Yogurt griego artesanal, saludable y delicioso</p>
       <nav>
-        <a href="#productos">Productos</a>
-        <a href="#contacto">Contacto</a>
+        <a href="#inicio">Inicio</a>
+        <a href="#sobre-nosotros">Sobre Nosotros</a>
+        <a href="#contacto">Contáctanos</a>
+        <a href="#ubicacion">Ubicación</a>
+        <a href="#carrito">Carrito 🛒 (<span id="cart-count">0</span>)</a>
       </nav>
     </header>
+
+    <!-- Sección inicio -->
+    <section id="inicio">
+      <h2>Bienvenidos a Frutos del Paraíso</h2>
+      <p>Yogurt griego artesanal, saludable y delicioso. Hecho con amor para ti.</p>
+    </section>
+
+    <!-- Sección sobre nosotros -->
+    <section id="sobre-nosotros">
+      <h2>Sobre Nosotros</h2>
+      <p>Somos un emprendimiento familiar que elabora yogurt griego con ingredientes naturales y frutas frescas. 
+      Nuestro objetivo es ofrecer un producto sano, nutritivo y con un sabor único.</p>
+      <h2>Misión</h2>
+      <p>Aquí va nuestra misión.</p>
+      <h2>Visión</h2>
+      <p>Aquí va nuestra visión.</p>
+    </section>
 
     <!-- Sección productos -->
     <section id="productos">
       <h2>Nuestros Productos</h2>
-      <div class="productos-container">
-        <!-- Aquí se cargarán automáticamente los productos desde Google Sheets -->
+      <div class="productos-container" id="productos-container">
+        <!-- Productos cargados dinámicamente -->
       </div>
     </section>
 
@@ -44,7 +64,6 @@
         <a href="https://facebook.com/" target="_blank">@frutosdelparaiso</a>
       </p>
 
-      <!-- Formulario movido DENTRO de la sección contacto -->
       <h3>O escríbenos aquí:</h3>
       <form action="https://formspree.io/f/mnngvqgk" method="POST" class="contact-form">
         <input type="text" name="nombre" placeholder="Tu nombre" required>
@@ -52,6 +71,24 @@
         <textarea name="mensaje" placeholder="Escribe tu mensaje aquí..." required></textarea>
         <button type="submit">Enviar mensaje</button>
       </form>
+    </section>
+
+    <!-- Ubicación -->
+    <section id="ubicacion" class="seccion">
+      <h2>Ubicación</h2>
+      <p>Estamos en Bogotá, Colombia</p>
+      <iframe 
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3976.999!2d-74.08175!3d4.60971!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e3f9a2e6f1f%3A0xabcdef!2sBogotá!5e0!3m2!1ses!2sco!4v1234567890"
+        width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy">
+      </iframe>
+    </section>
+
+    <!-- Sección carrito -->
+    <section id="carrito">
+      <h2>Carrito de Compras</h2>
+      <ul id="cart-list"></ul>
+      <p id="cart-total">Total: $0</p>
+      <button onclick="checkout()">Finalizar Pedido</button>
     </section>
 
     <!-- Footer -->
