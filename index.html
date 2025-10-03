@@ -4,59 +4,66 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Frutos del Paraíso</title>
-  <link rel="stylesheet" href="style.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto&display=swap" rel="stylesheet">
+  <!-- CSS -->
+  <link rel="stylesheet" href="estilos.css">
 </head>
 <body>
-  <!-- Encabezado -->
-  <header>
-    <h1>🥭 FRUTOS DEL PARAÍSO 🍓</h1>
-    <p>Yogurt griego artesanal, saludable y delicioso</p>
-    <nav>
-      <a href="#productos">Productos</a>
-      <a href="#contacto">Contacto</a>
-    </nav>
-  </header>
+  <div class="main-container">
+    <!-- Encabezado -->
+    <header>
+      <h1>🥭 FRUTOS DEL PARAÍSO 🍓</h1>
+      <p>Yogurt griego artesanal, saludable y delicioso</p>
+      <nav>
+        <a href="#productos">Productos</a>
+        <a href="#contacto">Contacto</a>
+      </nav>
+    </header>
 
-  <!-- Sección productos -->
-  <section id="productos">
-    <h2>Nuestros Productos</h2>
-    <div class="productos-container">
-      <!-- Aquí se cargarán automáticamente los productos desde Google Sheets -->
-    </div>
-  </section>
+    <!-- Sección productos -->
+    <section id="productos">
+      <h2>Nuestros Productos</h2>
+      <div class="productos-container">
+        <!-- Aquí se cargarán automáticamente los productos desde Google Sheets -->
+      </div>
+    </section>
 
-  <!-- Sección contacto -->
-  <section id="contacto">
-    <h2>Contáctanos</h2>
-    <p>Haz tus pedidos directamente:</p>
-    <a href="https://wa.me/573005970933?text=Hola%20vengo%20de%20la%20página%20web%20Frutos%20del%20Paraíso%20y%20quiero%20información%20de%20los%20productos."
-       target="_blank" class="btn-whatsapp">
-      📲 Pedir por WhatsApp
-    </a>
-    <p>Síguenos en Instagram: 
-      <a href="https://instagram.com/" target="_blank">@frutosdelparaiso</a>
-    </p>
-    <p>Síguenos en Facebook: 
-      <a href="https://facebook.com/" target="_blank">@frutosdelparaiso</a>
-    </p>
-  </section>
+    <!-- Sección contacto -->
+    <section id="contacto">
+      <h2>Contáctanos</h2>
+      <p>Haz tus pedidos directamente:</p>
+      <a href="https://wa.me/573005970933?text=Hola%20vengo%20de%20la%20página%20web%20Frutos%20del%20Paraíso%20y%20quiero%20información%20de%20los%20productos."
+         target="_blank" class="btn-whatsapp">
+        📲 Pedir por WhatsApp
+      </a>
+      <p>Síguenos en Instagram: 
+        <a href="https://instagram.com/" target="_blank">@frutosdelparaiso</a>
+      </p>
+      <p>Síguenos en Facebook: 
+        <a href="https://facebook.com/" target="_blank">@frutosdelparaiso</a>
+      </p>
+    </section>
 
-  <h3>O escríbenos aquí:</h3>
-  <form action="https://formspree.io/f/mnngvqgk" method="POST" class="contact-form">
-    <input type="text" name="nombre" placeholder="Tu nombre" required>
-    <p></p>
-    <input type="email" name="email" placeholder="Tu correo" required>
-    <p></p>
-    <textarea name="mensaje" placeholder="Escribe tu mensaje aquí..." required></textarea>
-    <p></p>
-    <button type="submit">Enviar mensaje</button>
-  </form>
+    <!-- Formulario de contacto -->
+    <h3>O escríbenos aquí:</h3>
+    <form action="https://formspree.io/f/mnngvqgk" method="POST" class="contact-form">
+      <input type="text" name="nombre" placeholder="Tu nombre" required>
+      <p></p>
+      <input type="email" name="email" placeholder="Tu correo" required>
+      <p></p>
+      <textarea name="mensaje" placeholder="Escribe tu mensaje aquí..." required></textarea>
+      <p></p>
+      <button type="submit">Enviar mensaje</button>
+    </form>
 
-  <footer>
-    <p>&copy; 2025 Frutos del Paraíso - Todos los derechos reservados</p>
-  </footer>
+    <!-- Footer -->
+    <footer>
+      <p>&copy; 2025 Frutos del Paraíso - Todos los derechos reservados</p>
+    </footer>
+  </div>
 
-  <!-- Carga el script externo -->
+  <!-- Script -->
   <script src="script.js"></script>
 </body>
 </html>

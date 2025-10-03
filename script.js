@@ -30,7 +30,9 @@ function csvToObjects(csv) {
   return lines.map(line => {
     const values = parseCsvLine(line);
     const obj = {};
-    headers.forEach((h, i) => obj[h] = values[i] ? values[i].trim() : '');
+    headers.forEach((h, i) => {
+      obj[h] = values[i] ? values[i].trim().replace(/^"|"$/g, '') : '';
+    });
     return obj;
   });
 }
@@ -64,10 +66,13 @@ function renderProducts(products) {
 
   products.forEach(p => {
     if (!p.name) return;
-    if (p.available && p.available.toLowerCase() !== 'yes') return;
+
+    // Filtrar productos no disponibles
+    const available = (p.available || '').trim().toLowerCase();
+    if (available !== 'yes') return;
 
     // Imagen principal o fallback si no hay
-    const imgSrc = (p.image_url && p.image_url !== '') ? p.image_url : 'img/fondo_negro.jpg';
+    const imgSrc = (p.image_url && p.image_url !== '') ? p.image_url : 'img/fondo-yogurt.jpg';
     const priceText = p.price ? `$${p.price}` : '';
     const desc = p.description || '';
     const whatsappMsg = encodeURIComponent(`Hola, vengo de la página Frutos del Paraíso y quiero información del producto: ${p.name}`);
@@ -77,7 +82,7 @@ function renderProducts(products) {
     const html = `
       <div class="producto">
         <img src="${imgSrc}" alt="${escapeHtml(p.name)}"
-             onerror="this.onerror=null; this.src='img/fondo_negro.jpg';">
+             onerror="this.onerror=null; this.src='img/fondo-yogurt.jpg';">
         <h3>${escapeHtml(p.name)}</h3>
         <p>${escapeHtml(desc)}</p>
         <span>${escapeHtml(priceText)}</span>

@@ -1,27 +1,68 @@
-/* estilos.css */
+/* estilos.css - versión con fondo y decoración */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Roboto', sans-serif;
 }
 
+/* Fondo general */
 body {
-  background-color: #fff;
-  color: #333;
-  line-height: 1.6;
+  background: url("./img/fondo.jpg") no-repeat center center fixed;
+  background-size: cover;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Overlay para mejorar contraste del texto */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.6); /* blanco suave semitransparente */
+  z-index: 0;
+}
+
+/* Contenedor principal centrado */
+.main-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  z-index: 1; /* para estar por encima del overlay */
+  padding: 2rem;
+}
+
+/* Para que se vea legible sobre el fondo */
+section, header, footer {
+  background: rgba(255, 248, 240, 0.9); /* transparencia suave */
+  border-radius: 15px;
+  padding: 2rem;
+  margin: 1rem auto;
+  max-width: 1100px;
+  position: relative;
+  z-index: 1; /* para quedar por encima del overlay */
 }
 
 /* Encabezado */
 header {
-  background: linear-gradient(135deg, #ff6f61, #ffb347);
+  background: linear-gradient(135deg, rgba(255,107,107,0.9), rgba(255,217,61,0.9));
   color: #fff;
   text-align: center;
   padding: 2rem 1rem;
+  border-radius: 0 0 25px 25px;
 }
 
 header h1 {
-  font-size: 2.2rem;
+  font-family: 'Pacifico', cursive;
+  font-size: 2.5rem;
   margin-bottom: 0.5rem;
 }
 
@@ -44,15 +85,7 @@ header nav a:hover {
 
 /* Secciones */
 section {
-  padding: 2rem 1rem;
-  max-width: 1000px;
-  margin: auto;
-}
-
-h2 {
   text-align: center;
-  margin-bottom: 1.5rem;
-  color: #ff6f61;
 }
 
 /* Productos */
@@ -60,20 +93,27 @@ h2 {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 1.5rem;
+  justify-content: center;
+  align-items: start;
 }
 
 .producto {
-  border: 1px solid #ddd;
-  border-radius: 10px;
+  border: none;
+  border-radius: 15px;
   padding: 1rem;
   text-align: center;
-  background: #fafafa;
+  background: #fff;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .producto:hover {
-  transform: translateY(-5px);
-  box-shadow: 0px 5px 15px rgba(0,0,0,0.2);
+  transform: translateY(-7px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
 }
 
 .producto img {
@@ -83,7 +123,7 @@ h2 {
 }
 
 .producto h3 {
-  color: #333;
+  color: #FF6B6B;
   margin-bottom: 0.5rem;
 }
 
@@ -92,22 +132,38 @@ h2 {
   margin: 0.5rem 0;
   font-weight: bold;
   color: #27ae60;
+  font-size: 1.1rem;
 }
 
-/* Botón de WhatsApp */
+/* Botón de WhatsApp y general */
+button, .btn-whatsapp {
+  border-radius: 12px;
+  padding: 12px 25px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+button {
+  background: #FF6B6B;
+  color: #fff;
+  border: none;
+}
+
+button:hover {
+  background-color: #e85c4a;
+  transform: scale(1.05);
+}
+
 .btn-whatsapp {
-  display: inline-block;
   background: #25d366;
   color: #fff !important;
-  padding: 10px 20px;
-  border-radius: 5px;
-  text-decoration: none;
-  font-weight: bold;
-  transition: background 0.3s ease;
 }
 
 .btn-whatsapp:hover {
   background: #1ebe57;
+  transform: scale(1.05);
 }
 
 /* Formulario de contacto */
@@ -116,10 +172,12 @@ h2 {
   margin: 1rem auto;
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
 .contact-form input,
 .contact-form textarea {
+  width: 100%;
   margin-bottom: 1rem;
   padding: 10px;
   border: 1px solid #ccc;
@@ -127,25 +185,30 @@ h2 {
 }
 
 .contact-form button {
-  background: #ff6f61;
-  color: #fff;
-  padding: 10px;
-  border: none;
-  border-radius: 5px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-
-.contact-form button:hover {
-  background: #e85c4a;
+  margin-top: 0.5rem;
 }
 
 /* Footer */
 footer {
   text-align: center;
   padding: 1rem;
-  background: #222;
+  background: rgba(34,34,34,0.9);
   color: #fff;
   margin-top: 2rem;
+  border-radius: 15px 15px 0 0;
+  position: relative;
+  z-index: 1;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .productos-container {
+    grid-template-columns: 1fr;
+  }
+
+  header nav {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
 }
