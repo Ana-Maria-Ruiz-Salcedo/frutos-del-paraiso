@@ -311,31 +311,76 @@ footer p {
     min-height: auto;
   }
 }
+/* --- BOTÓN FLOTANTE WHATSAPP (siempre visible con logo interno) --- */
+/* --- BOTÓN FLOTANTE WHATSAPP REAL --- */
 .whatsapp-float {
   position: fixed;
-  bottom: 25px;
+  bottom: 20px;
+  right: 20px; /* cámbialo a right: 20px si lo prefieres en la derecha */
+  background-color: #25D366;
+  border-radius: 50%;
+  width: 65px;
+  height: 65px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  text-decoration: none;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.whatsapp-float:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+
+.whatsapp-icon {
+  width: 35px;
+  height: 35px;
+  fill: white;
+}
+
+
+/* Botón flotante del carrito */
+.cart-float {
+  position: fixed;
+  bottom: 100px; /* más arriba que el de WhatsApp */
   right: 25px;
   width: 60px;
   height: 60px;
-  background-color: #25d366;
+  background-color: #ff6b6b;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
   box-shadow: 0 4px 12px rgba(0,0,0,0.3);
   z-index: 1000;
+  font-size: 26px;
+  color: white;
+  text-decoration: none;
   transition: all 0.3s ease;
   cursor: pointer;
 }
 
-.whatsapp-float:hover {
-  background-color: #1ebe57;
+.cart-float:hover {
+  background-color: #e64c4c;
   transform: scale(1.1);
   box-shadow: 0 6px 16px rgba(0,0,0,0.4);
 }
 
-.whatsapp-icon {
-  width: 35px;
-  height: 35px;
+/* Contador del carrito */
+.cart-float span {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  background: white;
+  color: #ff6b6b;
+  font-weight: bold;
+  font-size: 14px;
+  border-radius: 50%;
+  padding: 2px 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
 }
+
 
