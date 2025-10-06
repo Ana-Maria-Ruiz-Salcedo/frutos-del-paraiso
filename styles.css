@@ -1,4 +1,4 @@
-/* estilos.css - versión corregida final con botón verde en productos y botones + - ajustados */
+/* estilos.css - versión final con método de pago integrado */
 * {
   margin: 0;
   padding: 0;
@@ -10,13 +10,11 @@
 body {
   background: url("./img/fondo.jpg") no-repeat center center fixed;
   background-size: cover;
-  margin: 0;
-  padding: 0;
   min-height: 100vh;
   position: relative;
 }
 
-/* Overlay CORREGIDO - ahora está detrás */
+/* Overlay */
 body::before {
   content: "";
   position: fixed;
@@ -29,18 +27,17 @@ body::before {
   pointer-events: none;
 }
 
-/* Contenedor principal SIN centrado vertical */
+/* Contenedor principal */
 .main-container {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  padding: 0;
   width: 100%;
   position: relative;
   z-index: 1;
 }
 
-/* Secciones legibles */
+/* Secciones */
 section {
   background: rgba(255, 248, 240, 0.95);
   border-radius: 15px;
@@ -64,10 +61,6 @@ header {
   color: #fff;
   text-align: center;
   padding: 2rem 1rem;
-  border-radius: 0;
-  margin: 0;
-  width: 100%;
-  max-width: 100%;
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
@@ -127,7 +120,7 @@ header nav a:hover {
 
 .producto:hover {
   transform: translateY(-7px);
-  box-shadow: 0 8px 20px rgba(255, 107, 107, 0.3);
+  box-shadow: 0 8px 20px rgba(255,107,107,0.3);
   border-color: #FF6B6B;
 }
 
@@ -160,27 +153,25 @@ header nav a:hover {
   font-size: 1.3rem;
 }
 
-/* Botón Añadir al carrito (verde) */
+/* Botón Añadir al carrito */
 .producto button {
-  background: #27ae60; /* Verde */
+  background: #27ae60;
   color: #fff;
   border-radius: 12px;
   padding: 12px 25px;
   font-weight: bold;
   cursor: pointer;
   transition: all 0.3s ease;
-  text-decoration: none;
-  display: inline-block;
   border: none;
 }
 
 .producto button:hover {
-  background-color: #219150; /* Verde más oscuro al pasar el mouse */
+  background-color: #219150;
   transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(39, 174, 96, 0.4);
+  box-shadow: 0 4px 12px rgba(39,174,96,0.4);
 }
 
-/* Botones de cantidad ➕ y ➖ */
+/* Botones de cantidad */
 .producto div button:nth-child(1),
 .producto div button:nth-child(3) {
   background: transparent;
@@ -209,7 +200,7 @@ header nav a:hover {
 .btn-whatsapp:hover {
   background: #1ebe57;
   transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
+  box-shadow: 0 4px 12px rgba(37,211,102,0.4);
 }
 
 /* Sección de contacto */
@@ -238,7 +229,7 @@ header nav a:hover {
   margin: 1rem auto;
   display: flex;
   flex-direction: column;
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255,255,255,0.95);
   padding: 2rem;
   border-radius: 15px;
   box-shadow: 0 4px 15px rgba(0,0,0,0.1);
@@ -276,7 +267,7 @@ header nav a:hover {
 footer {
   text-align: center;
   padding: 1.5rem;
-  background: rgba(34, 34, 34, 0.95);
+  background: rgba(34,34,34,0.95);
   color: #fff;
   margin-top: 2rem;
   width: 100%;
@@ -311,12 +302,12 @@ footer p {
     min-height: auto;
   }
 }
-/* --- BOTÓN FLOTANTE WHATSAPP (siempre visible con logo interno) --- */
-/* --- BOTÓN FLOTANTE WHATSAPP REAL --- */
+
+/* Botón flotante WhatsApp */
 .whatsapp-float {
   position: fixed;
   bottom: 20px;
-  right: 20px; /* cámbialo a right: 20px si lo prefieres en la derecha */
+  right: 20px;
   background-color: #25D366;
   border-radius: 50%;
   width: 65px;
@@ -324,15 +315,14 @@ footer p {
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
   z-index: 1000;
-  text-decoration: none;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .whatsapp-float:hover {
   transform: scale(1.1);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.4);
 }
 
 .whatsapp-icon {
@@ -341,11 +331,10 @@ footer p {
   fill: white;
 }
 
-
-/* Botón flotante del carrito */
+/* Botón flotante carrito */
 .cart-float {
   position: fixed;
-  bottom: 100px; /* más arriba que el de WhatsApp */
+  bottom: 100px;
   right: 25px;
   width: 60px;
   height: 60px;
@@ -358,7 +347,6 @@ footer p {
   z-index: 1000;
   font-size: 26px;
   color: white;
-  text-decoration: none;
   transition: all 0.3s ease;
   cursor: pointer;
 }
@@ -383,6 +371,7 @@ footer p {
   box-shadow: 0 2px 6px rgba(0,0,0,0.3);
 }
 
+/* Botón de mapa */
 .boton-mapa {
   display: inline-block;
   background-color: #25D366;
@@ -397,6 +386,7 @@ footer p {
   background-color: #1ebe5d;
 }
 
+/* Versículo diario */
 #versiculo-diario {
   background: rgba(255, 248, 240, 0.95);
   border-radius: 15px;
@@ -424,4 +414,52 @@ footer p {
   color: #666;
   font-size: 0.9rem;
 }
+
+.metodo-pago-container {
+  margin-top: 1.5rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.metodo-pago-container label {
+  font-weight: bold;
+  color: #333;
+  font-size: 1.1rem;
+  margin-bottom: 5px;
+}
+
+.metodo-pago-container select {
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: 2px solid #ddd;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+  cursor: pointer;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.metodo-pago-container select:focus {
+  outline: none;
+  border-color: #FF6B6B;
+}
+.btn-pedido {
+  background: #27ae60;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.btn-pedido:hover {
+  background-color: #219150;
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(39,174,96,0.4);
+}
+
 

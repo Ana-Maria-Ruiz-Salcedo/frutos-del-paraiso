@@ -6,6 +6,27 @@
   <title>Carrito - Frutos del Paraíso</title>
   <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <style>
+    #qr-container {
+      display: none;
+      margin-top: 15px;
+      text-align: center;
+    }
+    #qr-container img {
+      width: 200px;
+      margin: 10px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+    #comprobante-container {
+      display: none;
+      margin-top: 15px;
+      text-align: center;
+    }
+    input[type="file"] {
+      margin-top: 10px;
+    }
+  </style>
 </head>
 <body>
   <header>
@@ -19,11 +40,39 @@
   </header>
 
   <section id="carrito">
-    <h2>Carrito de Compras</h2>
-    <ul id="cart-list"></ul>
-    <p id="cart-total">Total: $0</p>
-    <button class="btn-whatsapp" onclick="checkout()">Finalizar Pedido</button>
-  </section>
+  <h2>Carrito de Compras</h2>
+  <ul id="cart-list"></ul>
+  <p id="cart-total">Total: $0</p>
+
+  <!-- Texto estático con información de pago -->
+  <p style="margin:10px 0; padding:10px; background-color:#f5f5f5; border-radius:8px; font-weight:bold; text-align:center;">
+    Puedes realizar el pago por medios electrónicos: Nequi o Daviplata al número <strong>3005970933</strong> o usando nuestro código QR.
+  </p>
+
+  <p style="margin:10px 0; padding:10px; background-color:#f5f5f5; border-radius:8px; font-weight:bold; text-align:center;">
+    Nota: Recuerda que hacemos domicilios en todo Bogotá y este tiene un costo adicional dependiendo tu zona.
+  </p>
+
+  <div id="metodo-pago-container" style="margin-top: 15px;">
+    <label for="metodo-pago"><strong>Método de pago:</strong></label><br>
+    <select id="metodo-pago" onchange="mostrarQR()" style="padding: 5px; border-radius: 5px; margin-top: 5px;">
+      <option value="">Seleccione un método</option>
+      <option value="Nequi">💜 Nequi</option>
+      <option value="Daviplata">❤️ Daviplata</option>
+      <option value="Contraentrega">💵 Contraentrega</option>
+    </select>
+  </div>
+
+  <!-- QRs -->
+  <div id="qr-container">
+    <p><strong>Escanea el código QR para realizar el pago:</strong></p>
+    <img id="qr-nequi" src="img/qr-nequi.png" alt="QR Nequi" style="display:none;">
+    <img id="qr-daviplata" src="img/qr-daviplata.png" alt="QR Daviplata" style="display:none;">
+  </div>
+
+  <button class="btn-whatsapp" onclick="checkout()" style="margin-top: 20px;">✅ Hacer pedido</button>
+</section>
+
 
   <footer>
     <p>&copy; 2025 Frutos del Paraíso - Todos los derechos reservados</p>

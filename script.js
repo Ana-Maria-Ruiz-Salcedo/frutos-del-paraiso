@@ -1,4 +1,4 @@
-/* script.js - carrito con miniaturas de productos */
+/* script.js - carrito con miniaturas de productos y método de pago */
 const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS5ZpG2UqL8h_RZMxz44H_OaNZ38W-l9RCB_iqpb0bNOU42yHprW0i8A4g2c3mYZSoQJNd_0IxScpWC/pub?output=csv";
 const WHATSAPP_NUMBER = '573005970933'; // sin + ni espacios
 
@@ -186,12 +186,18 @@ function loadCartFromStorage() {
   }
 }
 
-/* Checkout */
+/* Checkout con método de pago */
 function checkout() {
   if (!cart.length) return alert("Tu carrito está vacío");
 
+  const metodoSelect = document.getElementById("metodo-pago");
+  const metodoPago = metodoSelect ? metodoSelect.value : "No especificado";
+
   const pedido = cart.map(p => `${p.name} x${p.qty} - $${p.price * p.qty}`).join("\n");
-  const mensaje = encodeURIComponent(`Hola, quiero hacer este pedido:\n${pedido}\n\nTotal: $${total}`);
+  const mensaje = encodeURIComponent(
+    `Hola 👋, quiero hacer este pedido desde *Frutos del Paraíso*: \n\n${pedido}\n\nTotal: $${total}\n\nMétodo de pago: ${metodoPago}\n\nGracias 🙏`
+  );
+
   window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${mensaje}`, "_blank");
 }
 
@@ -201,16 +207,15 @@ function updateFloatingCartCount() {
   if (floatCount) floatCount.textContent = cart.reduce((sum, item) => sum + item.qty, 0);
 }
 
-// --- Versículo o frase del día (en español o personalizada desde Google Sheets) ---
+// --- Versículo o frase del día ---
 const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS5ZpG2UqL8h_RZMxz44H_OaNZ38W-l9RCB_iqpb0bNOU42yHprW0i8A4g2c3mYZSoQJNd_0IxScpWC/pub?gid=953432776&single=true&output=csv";
 
 async function mostrarFraseDiaria() {
   try {
-    // 1️⃣ Intentar leer la frase personalizada de la hoja
     const res = await fetch(SHEET_URL);
     const text = await res.text();
     const rows = text.split("\n").map(r => r.split(","));
-    const frasePersonalizada = rows[1]?.[0]?.trim(); // fila 2, columna 1
+    const frasePersonalizada = rows[1]?.[0]?.trim(); 
 
     if (frasePersonalizada && frasePersonalizada.length > 0) {
       document.getElementById("versiculo-texto").innerText = frasePersonalizada;
@@ -218,13 +223,11 @@ async function mostrarFraseDiaria() {
       return;
     }
 
-    // 2️⃣ Si no hay frase personalizada, usar la API de OurManna (en inglés y traducirla)
     const apiRes = await fetch("https://beta.ourmanna.com/api/v1/get/?format=json");
     const data = await apiRes.json();
     const verseText = data.verse.details.text;
     const verseRef = data.verse.details.reference;
 
-    // Traducir automáticamente al español usando API gratuita
     const tradRes = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(verseText)}&langpair=en|es`);
     const tradData = await tradRes.json();
     const textoTraducido = tradData.responseData.translatedText || verseText;
@@ -238,7 +241,26 @@ async function mostrarFraseDiaria() {
   }
 }
 
-// Llamar al cargar la página
-mostrarFraseDiaria();
+/* --- Mostrar QR según método de pago --- */
+function mostrarQR() {
+  const metodo = document.getElementById("metodo-pago")?.value;
+  const qrContainer = document.getElementById("qr-container");
+  const qrNequi = document.getElementById("qr-nequi");
+  const qrDaviplata = document.getElementById("qr-daviplata");
 
-  
+  if (!qrContainer || !qrNequi || !qrDaviplata) return;
+
+  qrNequi.style.display = "none";
+  qrDaviplata.style.display = "none";
+  qrContainer.style.display = "none";
+
+  if (metodo === "Nequi") {
+    qrNequi.style.display = "inline-block";
+    qrContainer.style.display = "block";
+  } else if (metodo === "Daviplata") {
+    qrDaviplata.style.display = "inline-block";
+    qrContainer.style.display = "block";
+  }
+}
+
+mostrarFraseDiaria();
