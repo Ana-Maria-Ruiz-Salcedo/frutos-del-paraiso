@@ -200,3 +200,45 @@ function updateFloatingCartCount() {
   const floatCount = document.getElementById("cart-float-count");
   if (floatCount) floatCount.textContent = cart.reduce((sum, item) => sum + item.qty, 0);
 }
+
+// --- Versículo o frase del día (en español o personalizada desde Google Sheets) ---
+const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS5ZpG2UqL8h_RZMxz44H_OaNZ38W-l9RCB_iqpb0bNOU42yHprW0i8A4g2c3mYZSoQJNd_0IxScpWC/pub?gid=953432776&single=true&output=csv";
+
+async function mostrarFraseDiaria() {
+  try {
+    // 1️⃣ Intentar leer la frase personalizada de la hoja
+    const res = await fetch(SHEET_URL);
+    const text = await res.text();
+    const rows = text.split("\n").map(r => r.split(","));
+    const frasePersonalizada = rows[1]?.[0]?.trim(); // fila 2, columna 1
+
+    if (frasePersonalizada && frasePersonalizada.length > 0) {
+      document.getElementById("versiculo-texto").innerText = frasePersonalizada;
+      document.getElementById("versiculo-referencia").innerText = "";
+      return;
+    }
+
+    // 2️⃣ Si no hay frase personalizada, usar la API de OurManna (en inglés y traducirla)
+    const apiRes = await fetch("https://beta.ourmanna.com/api/v1/get/?format=json");
+    const data = await apiRes.json();
+    const verseText = data.verse.details.text;
+    const verseRef = data.verse.details.reference;
+
+    // Traducir automáticamente al español usando API gratuita
+    const tradRes = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(verseText)}&langpair=en|es`);
+    const tradData = await tradRes.json();
+    const textoTraducido = tradData.responseData.translatedText || verseText;
+
+    document.getElementById("versiculo-texto").innerText = textoTraducido;
+    document.getElementById("versiculo-referencia").innerText = "— " + verseRef;
+
+  } catch (err) {
+    console.error("Error cargar frase diaria:", err);
+    document.getElementById("versiculo-texto").innerText = "No se pudo cargar la frase del día.";
+  }
+}
+
+// Llamar al cargar la página
+mostrarFraseDiaria();
+
+  

@@ -383,4 +383,45 @@ footer p {
   box-shadow: 0 2px 6px rgba(0,0,0,0.3);
 }
 
+.boton-mapa {
+  display: inline-block;
+  background-color: #25D366;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+.boton-mapa:hover {
+  background-color: #1ebe5d;
+}
+
+#versiculo-diario {
+  background: rgba(255, 248, 240, 0.95);
+  border-radius: 15px;
+  padding: 2rem;
+  margin: 2rem auto;
+  max-width: 800px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+#versiculo-diario h2 {
+  color: #ff6b6b;
+  font-family: 'Pacifico', cursive;
+  margin-bottom: 1rem;
+}
+
+#versiculo-diario p {
+  font-size: 1.2rem;
+  color: #333;
+  font-style: italic;
+  margin-bottom: 0.5rem;
+}
+
+#versiculo-diario small {
+  color: #666;
+  font-size: 0.9rem;
+}
 
