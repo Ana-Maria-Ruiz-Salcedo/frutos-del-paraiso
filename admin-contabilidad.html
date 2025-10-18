@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contabilidad - Frutos del Paraíso</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+    }
+    h1 { text-align: center; color: #333; }
+    .container { width: 90%; margin: 20px auto; }
+    .tabs { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
+    .tab { padding: 10px 20px; cursor: pointer; background: #f7b2d9; border-radius: 8px; color: white; font-weight: bold; }
+    .tab.active { background: #f36ca7; }
+    .section { display: none; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    .section.active { display: block; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+    th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+    th { background: #f36ca7; color: white; }
+    input, select { padding: 5px; margin: 5px 0; width: 100%; box-sizing: border-box; }
+    button { padding: 8px 15px; margin-top: 10px; background: #f36ca7; border: none; color: white; cursor: pointer; border-radius: 5px; }
+    canvas { max-width: 100%; }
+    .export-btn { background-color: #36a2f7; margin-bottom: 20px; }
+    .export-btn:hover { background-color: #2b83c3; }
+  </style>
+
+  <!-- Librería Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Librería SheetJS para exportar Excel -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+  <h1>Contabilidad - Panel Administrador</h1>
+  <div class="container">
+    <div class="tabs">
+      <div class="tab active" data-tab="proveedores">Proveedores</div>
+      <div class="tab" data-tab="gastos">Gastos</div>
+      <div class="tab" data-tab="ingresos">Ingresos</div>
+      <div class="tab" data-tab="resumen">Resumen</div>
+    </div>
+
+    <!-- Botón Exportar Excel -->
+    <button class="export-btn" onclick="exportExcel()">📊 Exportar Excel</button>
+
+    <!-- Sección Proveedores -->
+    <div class="section active" id="proveedores">
+      <h2>Registrar Proveedor</h2>
+      <input type="text" id="provNombre" placeholder="Nombre del proveedor">
+      <input type="text" id="provContacto" placeholder="Teléfono o email">
+      <input type="text" id="provProductos" placeholder="Productos o servicios">
+      <button onclick="agregarProveedor()">Agregar Proveedor</button>
+
+      <h3>Lista de Proveedores</h3>
+      <table id="tablaProveedores">
+        <thead>
+          <tr><th>Nombre</th><th>Contacto</th><th>Productos/Servicios</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <!-- Sección Gastos -->
+    <div class="section" id="gastos">
+      <h2>Registrar Gasto</h2>
+      <input type="date" id="gastoFecha">
+      <input type="text" id="gastoConcepto" placeholder="Concepto del gasto">
+      <input type="number" id="gastoMonto" placeholder="Monto">
+      <select id="gastoCategoria">
+        <option value="Ingredientes">Ingredientes</option>
+        <option value="Servicios">Servicios</option>
+        <option value="Transporte">Transporte</option>
+        <option value="Otros">Otros</option>
+      </select>
+      <button onclick="agregarGasto()">Agregar Gasto</button>
+
+      <h3>Lista de Gastos</h3>
+      <table id="tablaGastos">
+        <thead>
+          <tr><th>Fecha</th><th>Concepto</th><th>Monto</th><th>Categoría</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <!-- Sección Ingresos -->
+    <div class="section" id="ingresos">
+      <h2>Registrar Ingreso</h2>
+      <input type="date" id="ingresoFecha">
+      <input type="text" id="ingresoConcepto" placeholder="Concepto del ingreso">
+      <input type="number" id="ingresoMonto" placeholder="Monto">
+      <select id="ingresoMetodo">
+        <option value="Nequi">Nequi</option>
+        <option value="Daviplata">Daviplata</option>
+        <option value="Contraentrega">Contraentrega</option>
+      </select>
+      <button onclick="agregarIngreso()">Agregar Ingreso</button>
+
+      <h3>Lista de Ingresos</h3>
+      <table id="tablaIngresos">
+        <thead>
+          <tr><th>Fecha</th><th>Concepto</th><th>Monto</th><th>Método</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <!-- Sección Resumen -->
+    <div class="section" id="resumen">
+      <h2>Resumen Financiero</h2>
+      <canvas id="graficoResumen"></canvas>
+      <p id="totalGastos">Total Gastos: $0</p>
+      <p id="totalIngresos">Total Ingresos: $0</p>
+      <p id="balance">Balance: $0</p>
+    </div>
+  </div>
+
+  <script>
+    // Manejo de pestañas
+    const tabs = document.querySelectorAll('.tab');
+    const sections = document.querySelectorAll('.section');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        sections.forEach(s => s.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById(tab.dataset.tab).classList.add('active');
+      });
+    });
+
+    // Datos
+    let proveedores = [];
+    let gastos = [];
+    let ingresos = [];
+
+    // Funciones Proveedores
+    function agregarProveedor() {
+      const nombre = document.getElementById('provNombre').value;
+      const contacto = document.getElementById('provContacto').value;
+      const productos = document.getElementById('provProductos').value;
+      if(nombre && contacto && productos) {
+        proveedores.push({nombre, contacto, productos});
+        mostrarProveedores();
+        document.getElementById('provNombre').value = '';
+        document.getElementById('provContacto').value = '';
+        document.getElementById('provProductos').value = '';
+      }
+    }
+    function mostrarProveedores() {
+      const tbody = document.querySelector('#tablaProveedores tbody');
+      tbody.innerHTML = '';
+      proveedores.forEach(p => {
+        const row = `<tr><td>${p.nombre}</td><td>${p.contacto}</td><td>${p.productos}</td></tr>`;
+        tbody.innerHTML += row;
+      });
+    }
+
+    // Funciones Gastos
+    function agregarGasto() {
+      const fecha = document.getElementById('gastoFecha').value;
+      const concepto = document.getElementById('gastoConcepto').value;
+      const monto = parseFloat(document.getElementById('gastoMonto').value);
+      const categoria = document.getElementById('gastoCategoria').value;
+      if(fecha && concepto && monto) {
+        gastos.push({fecha, concepto, monto, categoria});
+        mostrarGastos();
+        actualizarResumen();
+        document.getElementById('gastoFecha').value = '';
+        document.getElementById('gastoConcepto').value = '';
+        document.getElementById('gastoMonto').value = '';
+      }
+    }
+    function mostrarGastos() {
+      const tbody = document.querySelector('#tablaGastos tbody');
+      tbody.innerHTML = '';
+      gastos.forEach(g => {
+        const row = `<tr><td>${g.fecha}</td><td>${g.concepto}</td><td>$${g.monto.toFixed(2)}</td><td>${g.categoria}</td></tr>`;
+        tbody.innerHTML += row;
+      });
+    }
+
+    // Funciones Ingresos
+    function agregarIngreso() {
+      const fecha = document.getElementById('ingresoFecha').value;
+      const concepto = document.getElementById('ingresoConcepto').value;
+      const monto = parseFloat(document.getElementById('ingresoMonto').value);
+      const metodo = document.getElementById('ingresoMetodo').value;
+      if(fecha && concepto && monto) {
+        ingresos.push({fecha, concepto, monto, metodo});
+        mostrarIngresos();
+        actualizarResumen();
+        document.getElementById('ingresoFecha').value = '';
+        document.getElementById('ingresoConcepto').value = '';
+        document.getElementById('ingresoMonto').value = '';
+      }
+    }
+    function mostrarIngresos() {
+      const tbody = document.querySelector('#tablaIngresos tbody');
+      tbody.innerHTML = '';
+      ingresos.forEach(i => {
+        const row = `<tr><td>${i.fecha}</td><td>${i.concepto}</td><td>$${i.monto.toFixed(2)}</td><td>${i.metodo}</td></tr>`;
+        tbody.innerHTML += row;
+      });
+    }
+
+    // Resumen y gráfico
+    function actualizarResumen() {
+      const totalGastos = gastos.reduce((sum, g) => sum + g.monto, 0);
+      const totalIngresos = ingresos.reduce((sum, i) => sum + i.monto, 0);
+      const balance = totalIngresos - totalGastos;
+
+      document.getElementById('totalGastos').innerText = `Total Gastos: $${totalGastos.toFixed(2)}`;
+      document.getElementById('totalIngresos').innerText = `Total Ingresos: $${totalIngresos.toFixed(2)}`;
+      document.getElementById('balance').innerText = `Balance: $${balance.toFixed(2)}`;
+
+      const ctx = document.getElementById('graficoResumen').getContext('2d');
+      if(window.miGrafico) window.miGrafico.destroy();
+      window.miGrafico = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Gastos', 'Ingresos', 'Balance'],
+          datasets: [{
+            label: 'Resumen Financiero',
+            data: [totalGastos, totalIngresos, balance],
+            backgroundColor: ['#f36ca7', '#36a2f7', '#34eb7a']
+          }]
+        },
+        options: { responsive: true, plugins: { legend: { display: false } } }
+      });
+    }
+
+    // Función Exportar Excel
+    function exportExcel() {
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(proveedores), "Proveedores");
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(gastos), "Gastos");
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(ingresos), "Ingresos");
+      XLSX.writeFile(wb, "contabilidad.xlsx");
+    }
+  </script>
+</body>
+</html>
