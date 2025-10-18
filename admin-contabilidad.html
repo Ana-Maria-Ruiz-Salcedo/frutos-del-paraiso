@@ -26,16 +26,24 @@
     canvas { max-width: 100%; }
     .export-btn { background-color: #36a2f7; margin-bottom: 20px; }
     .export-btn:hover { background-color: #2b83c3; }
+    .nav-buttons { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
+    .nav-buttons button { background-color: #f7b2d9; color: white; padding: 8px 15px; border-radius: 5px; border: none; cursor: pointer; font-weight: bold; }
+    .nav-buttons button:hover { background-color: #f36ca7; }
   </style>
 
-  <!-- Librería Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- Librería SheetJS para exportar Excel -->
   <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 </head>
 <body>
   <h1>Contabilidad - Panel Administrador</h1>
   <div class="container">
+
+    <!-- Botones de navegación -->
+    <div class="nav-buttons">
+      <button onclick="window.location.href='index.html'">🏠 Inicio</button>
+      <button onclick="window.location.href='admin.html'">🔙 Administrador</button>
+    </div>
+
     <div class="tabs">
       <div class="tab active" data-tab="proveedores">Proveedores</div>
       <div class="tab" data-tab="gastos">Gastos</div>
@@ -43,7 +51,6 @@
       <div class="tab" data-tab="resumen">Resumen</div>
     </div>
 
-    <!-- Botón Exportar Excel -->
     <button class="export-btn" onclick="exportExcel()">📊 Exportar Excel</button>
 
     <!-- Sección Proveedores -->
@@ -53,7 +60,6 @@
       <input type="text" id="provContacto" placeholder="Teléfono o email">
       <input type="text" id="provProductos" placeholder="Productos o servicios">
       <button onclick="agregarProveedor()">Agregar Proveedor</button>
-
       <h3>Lista de Proveedores</h3>
       <table id="tablaProveedores">
         <thead>
@@ -76,7 +82,6 @@
         <option value="Otros">Otros</option>
       </select>
       <button onclick="agregarGasto()">Agregar Gasto</button>
-
       <h3>Lista de Gastos</h3>
       <table id="tablaGastos">
         <thead>
@@ -98,7 +103,6 @@
         <option value="Contraentrega">Contraentrega</option>
       </select>
       <button onclick="agregarIngreso()">Agregar Ingreso</button>
-
       <h3>Lista de Ingresos</h3>
       <table id="tablaIngresos">
         <thead>
@@ -232,7 +236,7 @@
       });
     }
 
-    // Función Exportar Excel
+    // Exportar Excel
     function exportExcel() {
       const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(proveedores), "Proveedores");
