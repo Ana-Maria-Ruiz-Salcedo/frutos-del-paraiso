@@ -462,4 +462,16 @@ footer p {
   box-shadow: 0 4px 12px rgba(39,174,96,0.4);
 }
 
+nav a.admin-link {
+  background-color: #ffb6c1;
+  color: white;
+  border-radius: 8px;
+  padding: 6px 10px;
+  margin-left: 10px;
+  transition: 0.3s;
+}
+
+nav a.admin-link:hover {
+  background-color: #ff8fab;
+}
 

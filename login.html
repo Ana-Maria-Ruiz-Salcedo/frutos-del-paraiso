@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Administrador - Frutos del Paraíso</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f7b2d9, #ffe3ec);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .login-container {
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      width: 350px;
+      padding: 30px;
+      text-align: center;
+    }
+
+    .login-container h1 {
+      color: #e6659f;
+      margin-bottom: 25px;
+    }
+
+    .login-container input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      font-size: 16px;
+    }
+
+    .login-container button {
+      width: 100%;
+      padding: 12px;
+      background-color: #e6659f;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .login-container button:hover {
+      background-color: #d9578f;
+    }
+
+    .error {
+      color: red;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+
+    .volver {
+      display: inline-block;
+      margin-top: 15px;
+      color: #888;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .volver:hover {
+      color: #e6659f;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-container">
+    <h1>Administrador</h1>
+    <input type="text" id="usuario" placeholder="Correo electrónico" />
+    <input type="password" id="clave" placeholder="Contraseña" />
+    <button onclick="login()">Ingresar</button>
+    <p id="error" class="error"></p>
+    <a href="index.html" class="volver">← Volver a la página principal</a>
+  </div>
+
+  <script>
+    function login() {
+      const usuario = document.getElementById("usuario").value.trim();
+      const clave = document.getElementById("clave").value.trim();
+      const error = document.getElementById("error");
+
+      // Credenciales definitivas
+      const adminUser = "admin@frutosdelparaiso.com";
+      const adminPass = "admin123";
+
+      if (usuario === adminUser && clave === adminPass) {
+        localStorage.setItem("adminLogged", "true");
+        window.location.href = "admin.html"; // redirige al panel
+      } else {
+        error.textContent = "Usuario o contraseña incorrectos.";
+      }
+    }
+  </script>
+</body>
+</html>

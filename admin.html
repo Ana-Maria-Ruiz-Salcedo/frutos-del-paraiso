@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel Administrador - Frutos del Paraíso</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f7b2d9, #ffe3ec);
+      margin: 0;
+      padding: 0;
+      display: flex;
+    }
+    /* Menú lateral */
+    .admin-menu {
+      width: 220px;
+      background-color: #e6659f;
+      color: white;
+      padding: 20px;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+      height: 100vh;
+      box-sizing: border-box;
+    }
+    .admin-menu h2 { text-align: center; margin-bottom: 20px; }
+    .admin-menu button {
+      display: block;
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      background-color: #f48fb1;
+      color: white;
+      cursor: pointer;
+      font-size: 16px;
+      transition: 0.3s;
+    }
+    .admin-menu button:hover { background-color: #d9578f; }
+    /* Contenido principal */
+    .admin-content { flex-grow: 1; padding: 30px; overflow-y: auto; }
+    .seccion-admin { display: none; }
+    .seccion-admin.active { display: block; }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: #fff;
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      padding: 30px;
+    }
+    input, textarea, select { width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ddd; border-radius: 10px; font-size: 16px; }
+    button.form-btn {
+      background-color: #e6659f;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+      font-size: 16px;
+      margin-right: 5px;
+    }
+    button.form-btn:hover { background-color: #d9578f; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #ddd; padding: 10px; text-align: center; }
+    th { background-color: #f9c5db; }
+    .acciones button { padding: 6px 10px; font-size: 14px; }
+    #cancelarEdicion { display: none; background-color: #aaa; }
+    #cancelarEdicion:hover { background-color: #888; }
+    /* Frase del día */
+    #frase-text { font-style: italic; margin-top: 15px; background-color: #ffe3ec; padding: 10px; border-radius: 8px; }
+  </style>
+</head>
+<body>
+
+  <!-- Menú lateral -->
+  <nav class="admin-menu">
+    <h2>Administrador</h2>
+    <button onclick="mostrarSeccion('productos')">Productos</button>
+    <button onclick="mostrarSeccion('frase')">Frase del Día</button>
+  </nav>
+
+  <!-- Contenido principal -->
+  <div class="admin-content">
+    
+    <!-- Sección Productos -->
+    <div id="productos" class="seccion-admin active">
+      <div class="container">
+        <h2 id="titulo-form">Agregar Producto</h2>
+        <input type="hidden" id="editId">
+        <input type="text" id="name" placeholder="Nombre del producto">
+        <textarea id="description" placeholder="Descripción"></textarea>
+        <input type="number" id="price" placeholder="Precio">
+        <input type="text" id="image_url" placeholder="URL de la imagen">
+        <select id="available">
+          <option value="yes">Disponible</option>
+          <option value="no">No disponible</option>
+        </select>
+        <button class="form-btn" id="btn-guardar" onclick="agregarProducto()">Agregar</button>
+        <button class="form-btn" id="cancelarEdicion" onclick="cancelarEdicion()">Cancelar</button>
+        <p id="mensaje"></p>
+
+        <h2>Lista de Productos</h2>
+        <table id="tabla-productos">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Precio</th>
+              <th>Disponible</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+
+        <a href="index.html" class="volver">← Volver al inicio</a>
+      </div>
+    </div>
+
+    <!-- Sección Frase del Día -->
+    <div id="frase" class="seccion-admin">
+      <div class="container">
+        <h2>Frase del Día</h2>
+        <p id="frase-text">Cargando frase...</p>
+        <button class="form-btn" onclick="actualizarFrase()">Actualizar Frase</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbz5vp7lao0lJfxNIunQ6OWj1J000hzsQKkA-eR8y1OTGuOW3QbX_g69n8NyegCse06e/exec";
+    const SHEET_FRASE_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS5ZpG2UqL8h_RZMxz44H_OaNZ38W-l9RCB_iqpb0bNOU42yHprW0i8A4g2c3mYZSoQJNd_0IxScpWC/pub?gid=953432776&single=true&output=csv";
+    let editando = false;
+
+    // ---------- FUNCIONES PRODUCTOS ----------
+    async function cargarProductos() {
+      const res = await fetch(API_URL);
+      const productos = await res.json();
+      const tbody = document.querySelector("#tabla-productos tbody");
+      tbody.innerHTML = "";
+      productos.forEach(p => {
+        const fila = `
+          <tr>
+            <td>${p.id}</td>
+            <td>${p.name}</td>
+            <td>$${p.price}</td>
+            <td>${p.available}</td>
+            <td class="acciones">
+              <button onclick='editarProducto(${JSON.stringify(p)})'>✏️ Editar</button>
+              <button onclick='eliminarProducto(${JSON.stringify(p.id)})'>🗑️ Eliminar</button>
+            </td>
+          </tr>`;
+        tbody.insertAdjacentHTML("beforeend", fila);
+      });
+    }
+
+    async function agregarProducto() {
+      const id = document.getElementById("editId").value || new Date().getTime();
+      const name = document.getElementById("name").value.trim();
+      const description = document.getElementById("description").value.trim();
+      const price = document.getElementById("price").value.trim();
+      const image_url = document.getElementById("image_url").value.trim();
+      const available = document.getElementById("available").value;
+
+      if (!name || !description || !price || !image_url) {
+        mostrarMensaje("Por favor completa todos los campos.", "red");
+        return;
+      }
+
+      const producto = { id, name, description, price, image_url, available, edit: editando };
+      const res = await fetch(API_URL, { method: "POST", body: JSON.stringify(producto) });
+      const texto = await res.text();
+      if (texto.includes("OK")) {
+        mostrarMensaje(editando ? "✅ Producto actualizado." : "✅ Producto agregado correctamente.", "green");
+        resetFormulario();
+        cargarProductos();
+      } else mostrarMensaje("⚠️ Error al guardar el producto.", "red");
+    }
+
+    function editarProducto(p) {
+      document.getElementById("titulo-form").textContent = "Editar Producto";
+      document.getElementById("btn-guardar").textContent = "Guardar Cambios";
+      document.getElementById("cancelarEdicion").style.display = "inline-block";
+      editando = true;
+      document.getElementById("editId").value = p.id;
+      document.getElementById("name").value = p.name;
+      document.getElementById("description").value = p.description;
+      document.getElementById("price").value = p.price;
+      document.getElementById("image_url").value = p.image_url;
+      document.getElementById("available").value = (p.available.toLowerCase() === "yes" || p.available.toLowerCase() === "sí") ? "yes" : "no";
+    }
+
+    function cancelarEdicion() {
+      resetFormulario();
+      mostrarMensaje("Edición cancelada.", "gray");
+    }
+
+    function resetFormulario() {
+      editando = false;
+      document.getElementById("titulo-form").textContent = "Agregar Producto";
+      document.getElementById("btn-guardar").textContent = "Agregar";
+      document.getElementById("cancelarEdicion").style.display = "none";
+      document.getElementById("editId").value = "";
+      document.getElementById("name").value = "";
+      document.getElementById("description").value = "";
+      document.getElementById("price").value = "";
+      document.getElementById("image_url").value = "";
+      document.getElementById("available").value = "yes";
+    }
+
+    async function eliminarProducto(id) {
+      if (!confirm("¿Seguro que deseas eliminar este producto?")) return;
+      const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ id, delete: true }) });
+      const texto = await res.text();
+      if (texto.includes("OK")) {
+        mostrarMensaje("🗑️ Producto eliminado.", "orange");
+        cargarProductos();
+      } else mostrarMensaje("⚠️ Error al eliminar el producto.", "red");
+    }
+
+    function mostrarMensaje(texto, color) {
+      const msg = document.getElementById("mensaje");
+      msg.textContent = texto;
+      msg.style.color = color;
+      setTimeout(() => msg.textContent = "", 3000);
+    }
+
+    cargarProductos();
+
+    // ---------- FUNCIONES MENÚ ----------
+    function mostrarSeccion(seccion) {
+      document.querySelectorAll('.seccion-admin').forEach(s => s.classList.remove('active'));
+      document.getElementById(seccion).classList.add('active');
+    }
+
+    // ---------- FUNCIONES FRASE DEL DÍA ----------
+    async function actualizarFrase() {
+      try {
+        const res = await fetch(SHEET_FRASE_URL);
+        const text = await res.text();
+        const rows = text.split("\n").map(r => r.split(","));
+        const frasePersonalizada = rows[1]?.[0]?.trim();
+
+        if (frasePersonalizada && frasePersonalizada.length > 0) {
+          document.getElementById("frase-text").innerText = frasePersonalizada;
+          return;
+        }
+
+        // Versículo automático
+        const apiRes = await fetch("https://beta.ourmanna.com/api/v1/get/?format=json");
+        const data = await apiRes.json();
+        const verseText = data.verse.details.text;
+        const verseRef = data.verse.details.reference;
+
+        const tradRes = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(verseText)}&langpair=en|es`);
+        const tradData = await tradRes.json();
+        const textoTraducido = tradData.responseData.translatedText || verseText;
+
+        document.getElementById("frase-text").innerText = `"${textoTraducido}" — ${verseRef}`;
+      } catch (err) {
+        console.error("Error cargar frase diaria:", err);
+        const frases = [
+          "La felicidad se encuentra en los pequeños detalles.",
+          "Cada día es una nueva oportunidad.",
+          "Haz de tu vida un sueño, y de tu sueño una realidad.",
+          "El éxito es la suma de pequeños esfuerzos repetidos día tras día.",
+          "Sonríe, respira y sigue adelante."
+        ];
+        document.getElementById('frase-text').textContent = frases[Math.floor(Math.random() * frases.length)];
+      }
+    }
+
+    actualizarFrase();
+  </script>
+
+</body>
+</html>
