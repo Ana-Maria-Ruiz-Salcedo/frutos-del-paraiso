@@ -68,6 +68,10 @@
     .acciones button { padding: 6px 10px; font-size: 14px; }
     #cancelarEdicion { display: none; background-color: #aaa; }
     #cancelarEdicion:hover { background-color: #888; }
+
+    /* Frase del día */
+    #frase-container { margin-top: 30px; }
+    #frase-dia { font-size: 18px; padding: 10px; border: 1px solid #ddd; border-radius: 10px; margin-bottom: 10px; min-height: 50px; }
   </style>
 </head>
 <body>
@@ -76,6 +80,7 @@
   <nav class="admin-menu">
     <h2>Administrador</h2>
     <button onclick="mostrarSeccion('productos')">Productos</button>
+    <button onclick="mostrarSeccion('frase')">Frase del Día</button>
     <button onclick="window.location.href='admin-contabilidad.html'">Contabilidad</button>
   </nav>
 
@@ -114,6 +119,16 @@
         </table>
 
         <a href="index.html" class="volver">← Volver al inicio</a>
+      </div>
+    </div>
+
+    <!-- Sección Frase del Día -->
+    <div id="frase" class="seccion-admin">
+      <div class="container" id="frase-container">
+        <h2>Frase del Día</h2>
+        <div id="frase-dia"></div>
+        <textarea id="frase-input" placeholder="Escribe la frase del día aquí"></textarea>
+        <button class="form-btn" onclick="guardarFrase()">Guardar Frase</button>
       </div>
     </div>
 
@@ -223,6 +238,25 @@
       document.querySelectorAll('.seccion-admin').forEach(s => s.classList.remove('active'));
       document.getElementById(seccion).classList.add('active');
     }
+
+    // ---------- FUNCIONES FRASE DEL DÍA ----------
+    const FRASE_KEY = "fraseDelDia";
+
+    function cargarFrase() {
+      const frase = localStorage.getItem(FRASE_KEY) || "Aquí aparecerá la frase del día.";
+      document.getElementById("frase-dia").textContent = frase;
+    }
+
+    function guardarFrase() {
+      const texto = document.getElementById("frase-input").value.trim();
+      if (!texto) return alert("Escribe una frase antes de guardar.");
+      localStorage.setItem(FRASE_KEY, texto);
+      document.getElementById("frase-dia").textContent = texto;
+      document.getElementById("frase-input").value = "";
+      alert("✅ Frase del día guardada.");
+    }
+
+    cargarFrase();
   </script>
 </body>
 </html>
