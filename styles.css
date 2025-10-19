@@ -461,3 +461,64 @@ nav a.admin-link {
 nav a.admin-link:hover {
   background-color: #ffb6c1;
 }
+/* Ajustes solo para móviles pequeños */
+@media (max-width: 480px) {
+  .productos-container {
+    grid-template-columns: 1fr !important;
+    gap: 1rem;
+  }
+
+  .producto {
+    min-height: auto;
+    padding: 1rem;
+  }
+
+  .producto img {
+    max-height: 150px;
+  }
+
+  .producto h3 {
+    font-size: 1.1rem;
+  }
+
+  .producto p {
+    font-size: 0.85rem;
+  }
+
+  .producto span {
+    font-size: 1.1rem;
+  }
+
+  .producto button {
+    padding: 10px 20px;
+    font-size: 0.95rem;
+  }
+
+  .contact-form {
+    padding: 1.5rem;
+  }
+
+  .metodo-pago-container select,
+  .metodo-pago-container label {
+    width: 90%;
+    font-size: 0.95rem;
+  }
+
+  .btn-pedido {
+    padding: 8px 16px;
+    font-size: 0.95rem;
+  }
+
+  #versiculo-diario {
+    padding: 1.5rem;
+    margin: 1rem auto;
+  }
+
+  #versiculo-diario h2 {
+    font-size: 1.5rem;
+  }
+
+  #versiculo-diario p {
+    font-size: 1rem;
+  }
+}
