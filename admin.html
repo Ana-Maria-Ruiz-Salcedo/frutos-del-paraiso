@@ -68,20 +68,15 @@
     .acciones button { padding: 6px 10px; font-size: 14px; }
     #cancelarEdicion { display: none; background-color: #aaa; }
     #cancelarEdicion:hover { background-color: #888; }
-    /* Frase del día */
-    #frase-text { font-style: italic; margin-top: 15px; background-color: #ffe3ec; padding: 10px; border-radius: 8px; }
   </style>
 </head>
 <body>
 
   <!-- Menú lateral -->
   <nav class="admin-menu">
-  <h2>Administrador</h2>
-  <button onclick="mostrarSeccion('productos')">Productos</button>
-  <button onclick="mostrarSeccion('frase')">Frase del Día</button>
-  <button onclick="window.location.href='admin-contabilidad.html'">Contabilidad</button>
-</nav>
-
+    <h2>Administrador</h2>
+    <button onclick="mostrarSeccion('productos')">Productos</button>
+    <button onclick="window.location.href='admin-contabilidad.html'">Contabilidad</button>
   </nav>
 
   <!-- Contenido principal -->
@@ -122,20 +117,10 @@
       </div>
     </div>
 
-    <!-- Sección Frase del Día -->
-    <div id="frase" class="seccion-admin">
-      <div class="container">
-        <h2>Frase del Día</h2>
-        <p id="frase-text">Cargando frase...</p>
-        <button class="form-btn" onclick="actualizarFrase()">Actualizar Frase</button>
-      </div>
-    </div>
-
   </div>
 
   <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbz5vp7lao0lJfxNIunQ6OWj1J000hzsQKkA-eR8y1OTGuOW3QbX_g69n8NyegCse06e/exec";
-    const SHEET_FRASE_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS5ZpG2UqL8h_RZMxz44H_OaNZ38W-l9RCB_iqpb0bNOU42yHprW0i8A4g2c3mYZSoQJNd_0IxScpWC/pub?gid=953432776&single=true&output=csv";
     let editando = false;
 
     // ---------- FUNCIONES PRODUCTOS ----------
@@ -238,45 +223,6 @@
       document.querySelectorAll('.seccion-admin').forEach(s => s.classList.remove('active'));
       document.getElementById(seccion).classList.add('active');
     }
-
-    // ---------- FUNCIONES FRASE DEL DÍA ----------
-    async function actualizarFrase() {
-      try {
-        const res = await fetch(SHEET_FRASE_URL);
-        const text = await res.text();
-        const rows = text.split("\n").map(r => r.split(","));
-        const frasePersonalizada = rows[1]?.[0]?.trim();
-
-        if (frasePersonalizada && frasePersonalizada.length > 0) {
-          document.getElementById("frase-text").innerText = frasePersonalizada;
-          return;
-        }
-
-        // Versículo automático
-        const apiRes = await fetch("https://beta.ourmanna.com/api/v1/get/?format=json");
-        const data = await apiRes.json();
-        const verseText = data.verse.details.text;
-        const verseRef = data.verse.details.reference;
-
-        const tradRes = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(verseText)}&langpair=en|es`);
-        const tradData = await tradRes.json();
-        const textoTraducido = tradData.responseData.translatedText || verseText;
-
-        document.getElementById("frase-text").innerText = `"${textoTraducido}" — ${verseRef}`;
-      } catch (err) {
-        console.error("Error cargar frase diaria:", err);
-        const frases = [
-          "La felicidad se encuentra en los pequeños detalles.",
-          "Cada día es una nueva oportunidad.",
-          "Haz de tu vida un sueño, y de tu sueño una realidad.",
-          "El éxito es la suma de pequeños esfuerzos repetidos día tras día.",
-          "Sonríe, respira y sigue adelante."
-        ];
-        document.getElementById('frase-text').textContent = frases[Math.floor(Math.random() * frases.length)];
-      }
-    }
-
-    actualizarFrase();
-    </script>
+  </script>
 </body>
 </html>
