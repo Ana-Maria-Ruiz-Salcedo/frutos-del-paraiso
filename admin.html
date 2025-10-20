@@ -5,29 +5,74 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Panel Administrador - Frutos del Paraíso</title>
   <style>
+    * { box-sizing: border-box; }
     body {
       font-family: 'Poppins', sans-serif;
       background: linear-gradient(135deg, #f7b2d9, #ffe3ec);
       margin: 0;
       padding: 0;
-      display: flex;
+      min-height: 100vh;
     }
-    /* Menú lateral */
-    .admin-menu {
-      width: 220px;
+
+    /* Botón hamburguesa */
+    .menu-toggle {
+      position: fixed;
+      top: 15px;
+      left: 15px;
       background-color: #e6659f;
       color: white;
-      padding: 20px;
-      box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-      height: 100vh;
-      box-sizing: border-box;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 24px;
+      cursor: pointer;
+      z-index: 1001;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+      transition: 0.3s;
     }
-    .admin-menu h2 { text-align: center; margin-bottom: 20px; }
+    .menu-toggle:hover { background-color: #d9578f; }
+
+    /* Overlay oscuro */
+    .menu-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      z-index: 999;
+      transition: 0.3s;
+    }
+    .menu-overlay.active { display: block; }
+
+    /* Menú lateral */
+    .admin-menu {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 250px;
+      height: 100vh;
+      background-color: #e6659f;
+      color: white;
+      padding: 70px 20px 20px;
+      box-shadow: 2px 0 15px rgba(0,0,0,0.3);
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+      z-index: 1000;
+      overflow-y: auto;
+    }
+    .admin-menu.active { transform: translateX(0); }
+    .admin-menu h2 { 
+      text-align: center; 
+      margin-bottom: 25px;
+      font-size: 22px;
+    }
     .admin-menu button {
       display: block;
       width: 100%;
-      margin-bottom: 10px;
-      padding: 10px;
+      margin-bottom: 12px;
+      padding: 12px;
       border: none;
       border-radius: 8px;
       background-color: #f48fb1;
@@ -37,19 +82,43 @@
       transition: 0.3s;
     }
     .admin-menu button:hover { background-color: #d9578f; }
+
     /* Contenido principal */
-    .admin-content { flex-grow: 1; padding: 30px; overflow-y: auto; }
+    .admin-content {
+      padding: 80px 15px 20px;
+      width: 100%;
+      max-width: 100%;
+    }
+
     .seccion-admin { display: none; }
     .seccion-admin.active { display: block; }
+
     .container {
-      max-width: 800px;
-      margin: auto;
+      max-width: 100%;
+      margin: 0 auto;
       background: #fff;
       border-radius: 15px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-      padding: 30px;
+      padding: 20px;
     }
-    input, textarea, select { width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ddd; border-radius: 10px; font-size: 16px; }
+
+    h2 { 
+      font-size: 20px; 
+      margin-bottom: 15px;
+      color: #e6659f;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      font-size: 16px;
+    }
+
+    textarea { min-height: 80px; resize: vertical; }
+
     button.form-btn {
       background-color: #e6659f;
       color: white;
@@ -59,34 +128,193 @@
       cursor: pointer;
       transition: 0.3s;
       font-size: 16px;
-      margin-right: 5px;
+      margin: 5px 5px 5px 0;
+      width: auto;
     }
     button.form-btn:hover { background-color: #d9578f; }
-    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-    th, td { border: 1px solid #ddd; padding: 10px; text-align: center; }
-    th { background-color: #f9c5db; }
-    .acciones button { padding: 6px 10px; font-size: 14px; }
-    #cancelarEdicion { display: none; background-color: #aaa; }
-    #cancelarEdicion:hover { background-color: #888; }
+
+    #mensaje {
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+
+    /* Tabla responsive */
+    .tabla-wrapper {
+      overflow-x: auto;
+      margin-top: 20px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 600px;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px 8px;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    th {
+      background-color: #f9c5db;
+      font-weight: bold;
+      position: sticky;
+      top: 0;
+    }
+
+    .acciones {
+      white-space: nowrap;
+    }
+
+    .acciones button {
+      padding: 8px 12px;
+      font-size: 13px;
+      margin: 2px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .acciones button:first-child {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    .acciones button:last-child {
+      background-color: #f44336;
+      color: white;
+    }
+
+    #cancelarEdicion {
+      display: none;
+      background-color: #999;
+    }
+    #cancelarEdicion:hover { background-color: #777; }
 
     /* Frase del día */
-    #frase-container { margin-top: 30px; }
-    #frase-dia { font-size: 18px; padding: 10px; border: 1px solid #ddd; border-radius: 10px; margin-bottom: 10px; min-height: 50px; }
+    #frase-dia {
+      font-size: 16px;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      min-height: 60px;
+      background-color: #fff5f8;
+    }
+
+    .volver {
+      display: inline-block;
+      margin-top: 20px;
+      color: #e6659f;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    /* Desktop */
+    @media (min-width: 769px) {
+      .menu-toggle { display: none; }
+      .menu-overlay { display: none !important; }
+      
+      body { display: flex; }
+      
+      .admin-menu {
+        position: relative;
+        transform: translateX(0);
+        width: 250px;
+        padding: 20px;
+      }
+      
+      .admin-content {
+        flex: 1;
+        padding: 30px;
+      }
+
+      .container {
+        max-width: 900px;
+        padding: 30px;
+      }
+
+      table { min-width: auto; }
+    }
+
+    /* Tablet */
+    @media (min-width: 481px) and (max-width: 768px) {
+      .container { padding: 25px; }
+      .admin-content { padding: 90px 20px 20px; }
+    }
+
+    /* Mobile pequeño */
+    @media (max-width: 480px) {
+      .menu-toggle {
+        top: 10px;
+        left: 10px;
+        padding: 10px 14px;
+        font-size: 20px;
+      }
+
+      .admin-menu { width: 220px; }
+
+      .admin-content { padding: 70px 10px 15px; }
+      
+      .container {
+        padding: 15px;
+        border-radius: 10px;
+      }
+
+      h2 { font-size: 18px; }
+
+      input, textarea, select {
+        padding: 10px;
+        font-size: 14px;
+      }
+
+      button.form-btn {
+        padding: 10px 15px;
+        font-size: 14px;
+        width: 100%;
+        margin: 5px 0;
+      }
+
+      th, td {
+        padding: 8px 5px;
+        font-size: 12px;
+      }
+
+      .acciones button {
+        padding: 6px 8px;
+        font-size: 12px;
+        display: block;
+        width: 100%;
+        margin: 3px 0;
+      }
+    }
   </style>
 </head>
 <body>
 
+  <!-- Botón hamburguesa -->
+  <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+
+  <!-- Overlay -->
+  <div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
+
   <!-- Menú lateral -->
-  <nav class="admin-menu">
+  <nav class="admin-menu" id="menuLateral">
     <h2>Administrador</h2>
-    <button onclick="mostrarSeccion('productos')">Productos</button>
-    <button onclick="mostrarSeccion('frase')">Frase del Día</button>
+    <button onclick="window.location.href='index.html'">← Volver al inicio</button>
+    <button onclick="mostrarSeccion('productos'); cerrarMenuMobile()">Productos</button>
+    <button onclick="mostrarSeccion('frase'); cerrarMenuMobile()">Frase del Día</button>
     <button onclick="window.location.href='admin-contabilidad.html'">Contabilidad</button>
   </nav>
 
   <!-- Contenido principal -->
   <div class="admin-content">
-    
     <!-- Sección Productos -->
     <div id="productos" class="seccion-admin active">
       <div class="container">
@@ -105,33 +333,33 @@
         <p id="mensaje"></p>
 
         <h2>Lista de Productos</h2>
-        <table id="tabla-productos">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Nombre</th>
-              <th>Precio</th>
-              <th>Disponible</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-
+        <div class="tabla-wrapper">
+          <table id="tabla-productos">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Precio</th>
+                <th>Disponible</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
         <a href="index.html" class="volver">← Volver al inicio</a>
       </div>
     </div>
 
     <!-- Sección Frase del Día -->
     <div id="frase" class="seccion-admin">
-      <div class="container" id="frase-container">
+      <div class="container">
         <h2>Frase del Día</h2>
         <div id="frase-dia"></div>
         <textarea id="frase-input" placeholder="Escribe la frase del día aquí"></textarea>
         <button class="form-btn" onclick="guardarFrase()">Guardar Frase</button>
       </div>
     </div>
-
   </div>
 
   <script>
@@ -194,6 +422,9 @@
       document.getElementById("price").value = p.price;
       document.getElementById("image_url").value = p.image_url;
       document.getElementById("available").value = (p.available.toLowerCase() === "yes" || p.available.toLowerCase() === "sí") ? "yes" : "no";
+      
+      // Scroll al formulario
+      document.getElementById("titulo-form").scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     function cancelarEdicion() {
@@ -228,12 +459,29 @@
       const msg = document.getElementById("mensaje");
       msg.textContent = texto;
       msg.style.color = color;
-      setTimeout(() => msg.textContent = "", 3000);
+      msg.style.backgroundColor = color === 'green' ? '#d4edda' : color === 'red' ? '#f8d7da' : '#e2e3e5';
+      setTimeout(() => {
+        msg.textContent = "";
+        msg.style.backgroundColor = "transparent";
+      }, 3000);
     }
 
     cargarProductos();
 
-    // ---------- FUNCIONES MENÚ ----------
+    // ---------- MENÚ RESPONSIVE ----------
+    function toggleMenu() {
+      const menu = document.getElementById("menuLateral");
+      const overlay = document.getElementById("menuOverlay");
+      menu.classList.toggle("active");
+      overlay.classList.toggle("active");
+    }
+
+    function cerrarMenuMobile() {
+      if (window.innerWidth <= 768) {
+        toggleMenu();
+      }
+    }
+
     function mostrarSeccion(seccion) {
       document.querySelectorAll('.seccion-admin').forEach(s => s.classList.remove('active'));
       document.getElementById(seccion).classList.add('active');
