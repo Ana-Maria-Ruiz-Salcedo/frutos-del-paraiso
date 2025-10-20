@@ -1,587 +1,955 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contabilidad - Frutos del Paraíso</title>
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #f7b2d9, #ffe3ec);
-      margin: 0;
-      padding: 0;
-      min-height: 100vh;
-    }
-    
-    h1 { 
-      text-align: center; 
-      color: #e6659f; 
-      margin: 20px 0;
-      font-size: 24px;
-      padding: 0 15px;
-    }
-    
-    .container { 
-      width: 95%; 
-      max-width: 1200px;
-      margin: 0 auto 20px; 
-      padding: 0 10px;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contabilidad - Frutos del Paraíso</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f7b2d9, #ffe3ec);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+        
+        h1 { 
+            text-align: center; 
+            color: #e6659f; 
+            margin: 20px 0;
+            font-size: 24px;
+            padding: 0 15px;
+        }
+        
+        .container { 
+            width: 95%; 
+            max-width: 1200px;
+            margin: 0 auto 20px; 
+            padding: 0 10px;
+        }
 
-    /* Botones de navegación */
-    .nav-buttons { 
-      display: flex; 
-      justify-content: center; 
-      gap: 10px; 
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-    }
-    .nav-buttons button { 
-      background-color: #f48fb1; 
-      color: white; 
-      padding: 10px 20px; 
-      border-radius: 8px; 
-      border: none; 
-      cursor: pointer; 
-      font-weight: bold;
-      font-size: 14px;
-      transition: 0.3s;
-    }
-    .nav-buttons button:hover { background-color: #e6659f; }
+        /* Botones de navegación */
+        .nav-buttons { 
+            display: flex; 
+            justify-content: center; 
+            gap: 10px; 
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .nav-buttons button { 
+            background-color: #f48fb1; 
+            color: white; 
+            padding: 10px 20px; 
+            border-radius: 8px; 
+            border: none; 
+            cursor: pointer; 
+            font-weight: bold;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+        .nav-buttons button:hover { background-color: #e6659f; }
 
-    /* Tabs */
-    .tabs { 
-      display: flex; 
-      justify-content: flex-start;
-      gap: 8px; 
-      margin-bottom: 15px;
-      overflow-x: auto;
-      padding-bottom: 10px;
-      -webkit-overflow-scrolling: touch;
-    }
-    .tabs::-webkit-scrollbar { height: 6px; }
-    .tabs::-webkit-scrollbar-thumb { background: #f48fb1; border-radius: 3px; }
-    
-    .tab { 
-      padding: 10px 18px; 
-      cursor: pointer; 
-      background: #f48fb1; 
-      border-radius: 8px; 
-      color: white; 
-      font-weight: bold;
-      white-space: nowrap;
-      font-size: 14px;
-      transition: 0.3s;
-      flex-shrink: 0;
-    }
-    .tab.active { background: #e6659f; }
-    .tab:hover { background: #e6659f; }
+        /* Tabs */
+        .tabs { 
+            display: flex; 
+            justify-content: flex-start;
+            gap: 8px; 
+            margin-bottom: 15px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+            -webkit-overflow-scrolling: touch;
+        }
+        .tabs::-webkit-scrollbar { height: 6px; }
+        .tabs::-webkit-scrollbar-thumb { background: #f48fb1; border-radius: 3px; }
+        
+        .tab { 
+            padding: 10px 18px; 
+            cursor: pointer; 
+            background: #f48fb1; 
+            border-radius: 8px; 
+            color: white; 
+            font-weight: bold;
+            white-space: nowrap;
+            font-size: 14px;
+            transition: 0.3s;
+            flex-shrink: 0;
+        }
+        .tab.active { background: #e6659f; }
+        .tab:hover { background: #e6659f; }
 
-    /* Botón exportar */
-    .export-btn { 
-      background-color: #36a2f7; 
-      margin-bottom: 15px;
-      width: 100%;
-      padding: 12px;
-      font-size: 16px;
-      border-radius: 8px;
-      border: none;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-    .export-btn:hover { background-color: #2b83c3; }
+        /* Botón exportar */
+        .export-btn { 
+            background-color: #36a2f7; 
+            margin-bottom: 15px;
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 8px;
+            border: none;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .export-btn:hover { background-color: #2b83c3; }
 
-    /* Secciones */
-    .section { 
-      display: none; 
-      background: white; 
-      padding: 20px; 
-      border-radius: 15px; 
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-    }
-    .section.active { display: block; }
+        /* Secciones */
+        .section { 
+            display: none; 
+            background: white; 
+            padding: 20px; 
+            border-radius: 15px; 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .section.active { display: block; }
 
-    h2 { 
-      color: #e6659f; 
-      margin-bottom: 15px;
-      font-size: 20px;
-    }
-    
-    h3 { 
-      color: #e6659f; 
-      margin: 20px 0 10px;
-      font-size: 18px;
-    }
+        h2 { 
+            color: #e6659f; 
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+        
+        h3 { 
+            color: #e6659f; 
+            margin: 20px 0 10px;
+            font-size: 18px;
+        }
 
-    /* Formularios */
-    input, select { 
-      padding: 12px; 
-      margin: 8px 0; 
-      width: 100%; 
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      font-size: 16px;
-      font-family: 'Poppins', sans-serif;
-    }
+        /* Formularios */
+        input, select { 
+            padding: 12px; 
+            margin: 8px 0; 
+            width: 100%; 
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: 'Poppins', sans-serif;
+        }
 
-    button:not(.tab):not(.nav-buttons button):not(.export-btn) { 
-      padding: 12px 20px; 
-      margin-top: 10px; 
-      background: #e6659f; 
-      border: none; 
-      color: white; 
-      cursor: pointer; 
-      border-radius: 8px;
-      width: 100%;
-      font-size: 16px;
-      font-weight: bold;
-      transition: 0.3s;
-    }
-    button:not(.tab):not(.nav-buttons button):not(.export-btn):hover { 
-      background: #d9578f; 
-    }
+        /* Botones de formulario (Agregar/Guardar/Cancelar) */
+        .form-action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
 
-    /* Tablas */
-    .tabla-wrapper {
-      overflow-x: auto;
-      margin-top: 15px;
-      -webkit-overflow-scrolling: touch;
-      border-radius: 10px;
-    }
-    
-    table { 
-      width: 100%; 
-      border-collapse: collapse; 
-      margin-bottom: 20px;
-      min-width: 500px;
-    }
-    
-    th, td { 
-      border: 1px solid #ddd; 
-      padding: 12px 10px; 
-      text-align: left;
-      font-size: 14px;
-    }
-    
-    th { 
-      background: #f48fb1; 
-      color: white;
-      font-weight: bold;
-      position: sticky;
-      top: 0;
-    }
+        .form-action-buttons button {
+            padding: 12px 20px; 
+            background: #e6659f; 
+            border: none; 
+            color: white; 
+            cursor: pointer; 
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            transition: 0.3s;
+            width: 100%; /* Ajuste para móviles */
+        }
+        .form-action-buttons button:hover { 
+            background: #d9578f; 
+        }
 
-    td { background: white; }
+        #cancelarProv, #cancelarGasto, #cancelarIngreso {
+            background-color: #999;
+            display: none; /* Oculto por defecto */
+        }
+        #cancelarProv:hover, #cancelarGasto:hover, #cancelarIngreso:hover {
+            background-color: #777;
+        }
 
-    /* Resumen financiero */
-    .resumen-cards {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 15px;
-      margin-bottom: 20px;
-    }
+        /* Tablas */
+        .tabla-wrapper {
+            overflow-x: auto;
+            margin-top: 15px;
+            -webkit-overflow-scrolling: touch;
+            border-radius: 10px;
+        }
+        
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-bottom: 20px;
+            min-width: 500px;
+        }
+        
+        th, td { 
+            border: 1px solid #ddd; 
+            padding: 12px 10px; 
+            text-align: left;
+            font-size: 14px;
+        }
+        
+        th { 
+            background: #f48fb1; 
+            color: white;
+            font-weight: bold;
+            position: sticky;
+            top: 0;
+        }
 
-    .card-resumen {
-      background: linear-gradient(135deg, #f48fb1, #e6659f);
-      color: white;
-      padding: 20px;
-      border-radius: 15px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    }
+        td { background: white; }
 
-    .card-resumen h4 {
-      margin: 0 0 10px;
-      font-size: 14px;
-      opacity: 0.9;
-    }
+        /* Estilos para los botones de acción (Editar/Eliminar) */
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+            justify-content: center;
+            flex-wrap: wrap; 
+        }
 
-    .card-resumen p {
-      margin: 0;
-      font-size: 28px;
-      font-weight: bold;
-    }
+        .action-btn {
+            padding: 6px 10px;
+            border: none;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: bold;
+            transition: 0.2s;
+            flex-shrink: 0;
+        }
 
-    .card-balance {
-      background: linear-gradient(135deg, #34eb7a, #28c96a);
-    }
+        .edit-btn {
+            background-color: #36a2f7; 
+        }
+        .edit-btn:hover {
+            background-color: #2b83c3;
+        }
 
-    canvas { 
-      max-width: 100%;
-      margin-top: 20px;
-    }
+        .delete-btn {
+            background-color: #ff6384; 
+        }
+        .delete-btn:hover {
+            background-color: #cc4f6a;
+        }
 
-    /* Tablet */
-    @media (min-width: 481px) and (max-width: 768px) {
-      .resumen-cards {
-        grid-template-columns: repeat(2, 1fr);
-      }
+        /* Resumen financiero (móviles/desktop) - Mismo que el anterior */
+        .resumen-cards {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
 
-      h1 { font-size: 26px; }
-      
-      .tab { padding: 10px 20px; }
-    }
+        .card-resumen {
+            background: linear-gradient(135deg, #f48fb1, #e6659f);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
 
-    /* Desktop */
-    @media (min-width: 769px) {
-      h1 { font-size: 32px; }
+        .card-resumen h4 {
+            margin: 0 0 10px;
+            font-size: 14px;
+            opacity: 0.9;
+        }
 
-      .container { width: 90%; }
+        .card-resumen p {
+            margin: 0;
+            font-size: 28px;
+            font-weight: bold;
+        }
 
-      .resumen-cards {
-        grid-template-columns: repeat(3, 1fr);
-      }
+        .card-balance {
+            background: linear-gradient(135deg, #34eb7a, #28c96a);
+        }
 
-      .tabs { 
-        justify-content: center;
-        overflow-x: visible;
-      }
+        canvas { 
+            max-width: 100%;
+            margin-top: 20px;
+        }
 
-      .export-btn {
-        width: auto;
-        padding: 12px 30px;
-      }
+        /* Media Queries */
+        @media (min-width: 481px) and (max-width: 768px) {
+            .resumen-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
 
-      button:not(.tab):not(.nav-buttons button):not(.export-btn) {
-        width: auto;
-      }
+        @media (min-width: 769px) {
+            .container { width: 90%; }
+            .resumen-cards {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .tabs { justify-content: center; overflow-x: visible; }
+            .export-btn { width: auto; padding: 12px 30px; }
+            .form-action-buttons button { width: auto; }
+            table { min-width: auto; }
+        }
 
-      table { min-width: auto; }
-    }
+        @media (max-width: 480px) {
+            .form-action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
 
-    /* Mobile pequeño */
-    @media (max-width: 480px) {
-      h1 { font-size: 20px; }
-      h2 { font-size: 18px; }
-      h3 { font-size: 16px; }
-
-      .section { padding: 15px; }
-      
-      .nav-buttons button {
-        padding: 8px 15px;
-        font-size: 13px;
-      }
-
-      .tab {
-        padding: 8px 15px;
-        font-size: 13px;
-      }
-
-      th, td {
-        padding: 10px 8px;
-        font-size: 13px;
-      }
-
-      .card-resumen p {
-        font-size: 24px;
-      }
-    }
-  </style>
-
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 </head>
 <body>
-  <h1>💰 Contabilidad - Panel Administrador</h1>
-  <div class="container">
+    <h1>💰 Contabilidad - Panel Administrador</h1>
+    <div class="container">
 
-    <!-- Botones de navegación -->
-    <div class="nav-buttons">
-      <button onclick="window.location.href='index.html'">🏠 Inicio</button>
-      <button onclick="window.location.href='admin.html'">🔙 Administrador</button>
-    </div>
-
-    <div class="tabs">
-      <div class="tab active" data-tab="proveedores">Proveedores</div>
-      <div class="tab" data-tab="gastos">Gastos</div>
-      <div class="tab" data-tab="ingresos">Ingresos</div>
-      <div class="tab" data-tab="resumen">Resumen</div>
-    </div>
-
-    <button class="export-btn" onclick="exportExcel()">📊 Exportar a Excel</button>
-
-    <!-- Sección Proveedores -->
-    <div class="section active" id="proveedores">
-      <h2>Registrar Proveedor</h2>
-      <input type="text" id="provNombre" placeholder="Nombre del proveedor">
-      <input type="text" id="provContacto" placeholder="Teléfono o email">
-      <input type="text" id="provProductos" placeholder="Productos o servicios">
-      <button onclick="agregarProveedor()">➕ Agregar Proveedor</button>
-      
-      <h3>Lista de Proveedores</h3>
-      <div class="tabla-wrapper">
-        <table id="tablaProveedores">
-          <thead>
-            <tr>
-              <th>Nombre</th>
-              <th>Contacto</th>
-              <th>Productos/Servicios</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- Sección Gastos -->
-    <div class="section" id="gastos">
-      <h2>Registrar Gasto</h2>
-      <input type="date" id="gastoFecha">
-      <input type="text" id="gastoConcepto" placeholder="Concepto del gasto">
-      <input type="number" id="gastoMonto" placeholder="Monto">
-      <select id="gastoCategoria">
-        <option value="Ingredientes">Ingredientes</option>
-        <option value="Servicios">Servicios</option>
-        <option value="Transporte">Transporte</option>
-        <option value="Otros">Otros</option>
-      </select>
-      <button onclick="agregarGasto()">➕ Agregar Gasto</button>
-      
-      <h3>Lista de Gastos</h3>
-      <div class="tabla-wrapper">
-        <table id="tablaGastos">
-          <thead>
-            <tr>
-              <th>Fecha</th>
-              <th>Concepto</th>
-              <th>Monto</th>
-              <th>Categoría</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- Sección Ingresos -->
-    <div class="section" id="ingresos">
-      <h2>Registrar Ingreso</h2>
-      <input type="date" id="ingresoFecha">
-      <input type="text" id="ingresoConcepto" placeholder="Concepto del ingreso">
-      <input type="number" id="ingresoMonto" placeholder="Monto">
-      <select id="ingresoMetodo">
-        <option value="Nequi">Nequi</option>
-        <option value="Daviplata">Daviplata</option>
-        <option value="Contraentrega">Contraentrega</option>
-      </select>
-      <button onclick="agregarIngreso()">➕ Agregar Ingreso</button>
-      
-      <h3>Lista de Ingresos</h3>
-      <div class="tabla-wrapper">
-        <table id="tablaIngresos">
-          <thead>
-            <tr>
-              <th>Fecha</th>
-              <th>Concepto</th>
-              <th>Monto</th>
-              <th>Método</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- Sección Resumen -->
-    <div class="section" id="resumen">
-      <h2>📈 Resumen Financiero</h2>
-      
-      <div class="resumen-cards">
-        <div class="card-resumen">
-          <h4>Total Gastos</h4>
-          <p id="totalGastos">$0</p>
+        <div class="nav-buttons">
+            <button onclick="window.location.href='index.html'">🏠 Inicio</button>
+            <button onclick="window.location.href='admin.html'">🔙 Administrador</button>
         </div>
-        <div class="card-resumen">
-          <h4>Total Ingresos</h4>
-          <p id="totalIngresos">$0</p>
-        </div>
-        <div class="card-resumen card-balance">
-          <h4>Balance</h4>
-          <p id="balance">$0</p>
-        </div>
-      </div>
 
-      <canvas id="graficoResumen"></canvas>
+        <div class="tabs">
+            <div class="tab active" data-tab="proveedores">Proveedores</div>
+            <div class="tab" data-tab="gastos">Gastos</div>
+            <div class="tab" data-tab="ingresos">Ingresos</div>
+            <div class="tab" data-tab="resumen">Resumen</div>
+        </div>
+
+        <button class="export-btn" onclick="exportExcel()">📊 Exportar a Excel</button>
+
+        <div class="section active" id="proveedores">
+            <h2 id="tituloProv">Registrar Proveedor</h2>
+            <input type="hidden" id="provIndex"> 
+            <input type="text" id="provNombre" placeholder="Nombre del proveedor">
+            <input type="text" id="provContacto" placeholder="Teléfono o email">
+            <input type="text" id="provProductos" placeholder="Productos o servicios">
+            
+            <div class="form-action-buttons">
+                <button onclick="guardarProveedor()" id="btnGuardarProveedor">➕ Agregar Proveedor</button>
+                <button onclick="resetFormulario('Proveedor')" id="cancelarProv">❌ Cancelar</button>
+            </div>
+            
+            <h3>Lista de Proveedores</h3>
+            <div class="tabla-wrapper">
+                <table id="tablaProveedores">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Contacto</th>
+                            <th>Productos/Servicios</th>
+                            <th>Acciones</th>          
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="section" id="gastos">
+            <h2 id="tituloGasto">Registrar Gasto</h2>
+            <input type="hidden" id="gastoIndex"> 
+            <input type="date" id="gastoFecha">
+            <input type="text" id="gastoConcepto" placeholder="Concepto del gasto">
+            <input type="number" id="gastoMonto" placeholder="Monto">
+            <select id="gastoCategoria">
+                <option value="Ingredientes">Ingredientes</option>
+                <option value="Servicios">Servicios</option>
+                <option value="Transporte">Transporte</option>
+                <option value="Otros">Otros</option>
+            </select>
+            
+            <div class="form-action-buttons">
+                <button onclick="guardarGasto()" id="btnGuardarGasto">➕ Agregar Gasto</button>
+                <button onclick="resetFormulario('Gasto')" id="cancelarGasto">❌ Cancelar</button>
+            </div>
+            
+            <h3>Lista de Gastos</h3>
+            <div class="tabla-wrapper">
+                <table id="tablaGastos">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Concepto</th>
+                            <th>Monto</th>
+                            <th>Categoría</th>
+                            <th>Acciones</th>          
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="section" id="ingresos">
+            <h2 id="tituloIngreso">Registrar Ingreso</h2>
+            <input type="hidden" id="ingresoIndex"> 
+            <input type="date" id="ingresoFecha">
+            <input type="text" id="ingresoConcepto" placeholder="Concepto del ingreso">
+            <input type="number" id="ingresoMonto" placeholder="Monto">
+            <select id="ingresoMetodo">
+                <option value="Nequi">Nequi</option>
+                <option value="Daviplata">Daviplata</option>
+                <option value="Contraentrega">Contraentrega</option>
+            </select>
+
+            <div class="form-action-buttons">
+                <button onclick="guardarIngreso()" id="btnGuardarIngreso">➕ Agregar Ingreso</button>
+                <button onclick="resetFormulario('Ingreso')" id="cancelarIngreso">❌ Cancelar</button>
+            </div>
+            
+            <h3>Lista de Ingresos</h3>
+            <div class="tabla-wrapper">
+                <table id="tablaIngresos">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Concepto</th>
+                            <th>Monto</th>
+                            <th>Método</th>
+                            <th>Acciones</th>          
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="section" id="resumen">
+            <h2>📈 Resumen Financiero</h2>
+            
+            <div class="resumen-cards">
+                <div class="card-resumen">
+                    <h4>Total Gastos</h4>
+                    <p id="totalGastos">$0</p>
+                </div>
+                <div class="card-resumen">
+                    <h4>Total Ingresos</h4>
+                    <p id="totalIngresos">$0</p>
+                </div>
+                <div class="card-resumen card-balance">
+                    <h4>Balance</h4>
+                    <p id="balance">$0</p>
+                </div>
+            </div>
+
+            <canvas id="graficoResumen"></canvas>
+        </div>
     </div>
-  </div>
 
-  <script>
-    // Manejo de pestañas
-    const tabs = document.querySelectorAll('.tab');
-    const sections = document.querySelectorAll('.section');
-    tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        tabs.forEach(t => t.classList.remove('active'));
-        sections.forEach(s => s.classList.remove('active'));
-        tab.classList.add('active');
-        document.getElementById(tab.dataset.tab).classList.add('active');
-      });
-    });
+    <script>
+        // ***************************************************************
+        // *** 1. CONFIGURACIÓN: URL DE DESPLIEGUE DE GOOGLE APPS SCRIPT ***
+        // ***************************************************************
+        const API_URL = "https://script.google.com/macros/s/AKfycbzzvepEsp0-GDometbnQpJJMtmiKo5HfGJhT2SacRO1C-dt-Ot4ZyX2vlmraj3z0s4/exec"; 
+        
+        // ***************************************************************
 
-    // Datos
-    let proveedores = JSON.parse(localStorage.getItem('proveedores')) || [];
-    let gastos = JSON.parse(localStorage.getItem('gastos')) || [];
-    let ingresos = JSON.parse(localStorage.getItem('ingresos')) || [];
+        // Variables para almacenar los datos (se cargan desde la hoja de cálculo)
+        let proveedores = [];
+        let gastos = [];
+        let ingresos = [];
+        let registroEnEdicion = null; // Usaremos esta variable para guardar el objeto completo
 
-    // Funciones Proveedores
-    function agregarProveedor() {
-      const nombre = document.getElementById('provNombre').value.trim();
-      const contacto = document.getElementById('provContacto').value.trim();
-      const productos = document.getElementById('provProductos').value.trim();
-      
-      if(nombre && contacto && productos) {
-        proveedores.push({nombre, contacto, productos});
-        localStorage.setItem('proveedores', JSON.stringify(proveedores));
-        mostrarProveedores();
-        document.getElementById('provNombre').value = '';
-        document.getElementById('provContacto').value = '';
-        document.getElementById('provProductos').value = '';
-        alert('✅ Proveedor agregado correctamente');
-      } else {
-        alert('⚠️ Por favor completa todos los campos');
-      }
-    }
+        // --------------------------------------------------------------------
+        // --- FUNCIONES DE COMUNICACIÓN CON GOOGLE SHEETS (API) ---
+        // --------------------------------------------------------------------
 
-    function mostrarProveedores() {
-      const tbody = document.querySelector('#tablaProveedores tbody');
-      tbody.innerHTML = '';
-      proveedores.forEach(p => {
-        const row = `<tr><td>${p.nombre}</td><td>${p.contacto}</td><td>${p.productos}</td></tr>`;
-        tbody.innerHTML += row;
-      });
-    }
-
-    // Funciones Gastos
-    function agregarGasto() {
-      const fecha = document.getElementById('gastoFecha').value;
-      const concepto = document.getElementById('gastoConcepto').value.trim();
-      const monto = parseFloat(document.getElementById('gastoMonto').value);
-      const categoria = document.getElementById('gastoCategoria').value;
-      
-      if(fecha && concepto && monto) {
-        gastos.push({fecha, concepto, monto, categoria});
-        localStorage.setItem('gastos', JSON.stringify(gastos));
-        mostrarGastos();
-        actualizarResumen();
-        document.getElementById('gastoFecha').value = '';
-        document.getElementById('gastoConcepto').value = '';
-        document.getElementById('gastoMonto').value = '';
-        alert('✅ Gasto registrado correctamente');
-      } else {
-        alert('⚠️ Por favor completa todos los campos');
-      }
-    }
-
-    function mostrarGastos() {
-      const tbody = document.querySelector('#tablaGastos tbody');
-      tbody.innerHTML = '';
-      gastos.forEach(g => {
-        const row = `<tr><td>${g.fecha}</td><td>${g.concepto}</td><td>$${g.monto.toLocaleString('es-CO')}</td><td>${g.categoria}</td></tr>`;
-        tbody.innerHTML += row;
-      });
-    }
-
-    // Funciones Ingresos
-    function agregarIngreso() {
-      const fecha = document.getElementById('ingresoFecha').value;
-      const concepto = document.getElementById('ingresoConcepto').value.trim();
-      const monto = parseFloat(document.getElementById('ingresoMonto').value);
-      const metodo = document.getElementById('ingresoMetodo').value;
-      
-      if(fecha && concepto && monto) {
-        ingresos.push({fecha, concepto, monto, metodo});
-        localStorage.setItem('ingresos', JSON.stringify(ingresos));
-        mostrarIngresos();
-        actualizarResumen();
-        document.getElementById('ingresoFecha').value = '';
-        document.getElementById('ingresoConcepto').value = '';
-        document.getElementById('ingresoMonto').value = '';
-        alert('✅ Ingreso registrado correctamente');
-      } else {
-        alert('⚠️ Por favor completa todos los campos');
-      }
-    }
-
-    function mostrarIngresos() {
-      const tbody = document.querySelector('#tablaIngresos tbody');
-      tbody.innerHTML = '';
-      ingresos.forEach(i => {
-        const row = `<tr><td>${i.fecha}</td><td>${i.concepto}</td><td>$${i.monto.toLocaleString('es-CO')}</td><td>${i.metodo}</td></tr>`;
-        tbody.innerHTML += row;
-      });
-    }
-
-    // Resumen y gráfico
-    function actualizarResumen() {
-      const totalGastos = gastos.reduce((sum, g) => sum + g.monto, 0);
-      const totalIngresos = ingresos.reduce((sum, i) => sum + i.monto, 0);
-      const balance = totalIngresos - totalGastos;
-
-      document.getElementById('totalGastos').innerText = `$${totalGastos.toLocaleString('es-CO')}`;
-      document.getElementById('totalIngresos').innerText = `$${totalIngresos.toLocaleString('es-CO')}`;
-      document.getElementById('balance').innerText = `$${balance.toLocaleString('es-CO')}`;
-
-      const ctx = document.getElementById('graficoResumen').getContext('2d');
-      if(window.miGrafico) window.miGrafico.destroy();
-      window.miGrafico = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: ['Gastos', 'Ingresos', 'Balance'],
-          datasets: [{
-            label: 'Monto ($)',
-            data: [totalGastos, totalIngresos, balance],
-            backgroundColor: ['#f36ca7', '#36a2f7', '#34eb7a']
-          }]
-        },
-        options: { 
-          responsive: true,
-          maintainAspectRatio: true,
-          plugins: { 
-            legend: { display: true },
-            tooltip: {
-              callbacks: {
-                label: function(context) {
-                  return '$' + context.parsed.y.toLocaleString('es-CO');
-                }
-              }
+        /**
+         * Función unificada para LECTURA (GET)
+         * @param {string} sheetKey - El nombre corto de la hoja ('proveedores', 'gastos', 'ingresos').
+         */
+        async function fetchRecords(sheetKey) {
+            try {
+                const res = await fetch(`${API_URL}?sheet=${sheetKey}`);
+                if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+                const data = await res.json();
+                // Los datos se retornan con las cabeceras en mayúsculas (ej: 'Nombre', 'Contacto', 'ID')
+                return data; 
+            } catch (error) {
+                console.error(`Error al cargar ${sheetKey}:`, error);
+                alert(`⚠️ Error al cargar datos de ${sheetKey}. Revisa tu API_URL y despliegue.`);
+                return [];
             }
-          },
-          scales: {
-            y: {
-              beginAtZero: true,
-              ticks: {
-                callback: function(value) {
-                  return '$' + value.toLocaleString('es-CO');
-                }
-              }
-            }
-          }
         }
-      });
-    }
 
-    // Exportar Excel
-    function exportExcel() {
-      if(proveedores.length === 0 && gastos.length === 0 && ingresos.length === 0) {
-        alert('⚠️ No hay datos para exportar');
-        return;
-      }
-      
-      const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(proveedores), "Proveedores");
-      XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(gastos), "Gastos");
-      XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(ingresos), "Ingresos");
-      XLSX.writeFile(wb, "contabilidad_frutos_del_paraiso.xlsx");
-      alert('✅ Excel exportado correctamente');
-    }
+        /**
+         * Función unificada para ESCRITURA (POST) - Agregar, Editar, Eliminar
+         * @param {string} sheetKey - El nombre corto de la hoja.
+         * @param {object} data - El objeto de datos que incluye action, id (opcional) y data (payload).
+         */
+        async function postRecord(sheetKey, data) {
+            try {
+                // El Apps Script espera el 'sheet' dentro del cuerpo del POST
+                const res = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                         'Content-Type': 'text/plain;charset=utf-8', // Requerido por Apps Script
+                    },
+                    body: JSON.stringify({ ...data, sheet: sheetKey })
+                });
+                const responseText = await res.text();
+                // Tu script responde con {"success": true} en caso de éxito o {"error": "..."}
+                const response = JSON.parse(responseText); 
+                
+                if (response.success) {
+                    return true;
+                } else {
+                    console.error('Error al guardar:', response.error);
+                    alert(`⚠️ Error al guardar en ${sheetKey}. Respuesta del servidor: ${response.error || 'Desconocido'}`);
+                    return false;
+                }
+            } catch (error) {
+                console.error('Error de conexión/parseo:', error);
+                alert('⚠️ Error de conexión o formato de respuesta con Google Sheets API.');
+                return false;
+            }
+        }
 
-    // Cargar datos al iniciar
-    mostrarProveedores();
-    mostrarGastos();
-    mostrarIngresos();
-    actualizarResumen();
-  </script>
+        // --------------------------------------------------------------------
+        // --- FUNCIONES GENERALES DE UI Y DATOS ---
+        // --------------------------------------------------------------------
+
+        // Manejo de pestañas
+        const tabs = document.querySelectorAll('.tab');
+        const sections = document.querySelectorAll('.section');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                sections.forEach(s => s.classList.remove('active'));
+                tab.classList.add('active');
+                const targetId = tab.dataset.tab;
+                document.getElementById(targetId).classList.add('active');
+                
+                // Llama a resetFormulario para limpiar el formulario al cambiar de pestaña
+                if (targetId === 'proveedores') resetFormulario('Proveedor');
+                if (targetId === 'gastos') resetFormulario('Gasto');
+                if (targetId === 'ingresos') resetFormulario('Ingreso');
+
+                if (targetId === 'resumen') {
+                    actualizarResumen();
+                }
+            });
+        });
+
+        // Función para limpiar el formulario y volver al modo "Agregar"
+        function resetFormulario(tipo) {
+            registroEnEdicion = null; // Limpiamos el registro en edición
+            
+            if (tipo === 'Proveedor') {
+                document.getElementById('tituloProv').textContent = 'Registrar Proveedor';
+                document.getElementById('provNombre').value = '';
+                document.getElementById('provContacto').value = '';
+                document.getElementById('provProductos').value = '';
+                document.getElementById('provIndex').value = ''; // No se usa para API, pero lo limpiamos
+                document.getElementById('btnGuardarProveedor').textContent = '➕ Agregar Proveedor';
+                document.getElementById('cancelarProv').style.display = 'none';
+            } else if (tipo === 'Gasto') {
+                document.getElementById('tituloGasto').textContent = 'Registrar Gasto';
+                document.getElementById('gastoFecha').value = new Date().toISOString().split('T')[0];
+                document.getElementById('gastoConcepto').value = '';
+                document.getElementById('gastoMonto').value = '';
+                document.getElementById('gastoCategoria').value = 'Ingredientes';
+                document.getElementById('gastoIndex').value = '';
+                document.getElementById('btnGuardarGasto').textContent = '➕ Agregar Gasto';
+                document.getElementById('cancelarGasto').style.display = 'none';
+            } else if (tipo === 'Ingreso') {
+                document.getElementById('tituloIngreso').textContent = 'Registrar Ingreso';
+                document.getElementById('ingresoFecha').value = new Date().toISOString().split('T')[0];
+                document.getElementById('ingresoConcepto').value = '';
+                document.getElementById('ingresoMonto').value = '';
+                document.getElementById('ingresoMetodo').value = 'Nequi';
+                document.getElementById('ingresoIndex').value = '';
+                document.getElementById('btnGuardarIngreso').textContent = '➕ Agregar Ingreso';
+                document.getElementById('cancelarIngreso').style.display = 'none';
+            }
+        }
+        
+        // Función de actualización para Gastos e Ingresos (Unificada)
+        async function actualizarGastosEIngresos() {
+            await cargarGastos();
+            await cargarIngresos();
+            actualizarResumen();
+        }
+
+        // --------------------------------------------------------------------
+        // --- FUNCIONES DE PROVEEDORES ---
+        // --------------------------------------------------------------------
+
+        async function cargarProveedores() {
+            // Asume que las cabeceras son: Nombre, Contacto, Productos, ID (en mayúscula)
+            proveedores = await fetchRecords('proveedores');
+            mostrarProveedores();
+        }
+
+        async function guardarProveedor() {
+            const nombre = document.getElementById('provNombre').value.trim();
+            const contacto = document.getElementById('provContacto').value.trim();
+            const productos = document.getElementById('provProductos').value.trim();
+            
+            if(!nombre || !contacto || !productos) {
+                alert('⚠️ Por favor completa todos los campos');
+                return;
+            }
+
+            let dataToSend = {nombre, contacto, productos};
+            let success = false;
+            let id_registro = registroEnEdicion ? registroEnEdicion.ID : null;
+
+            if(id_registro) {
+                // EDITAR:
+                success = await postRecord('proveedores', { 
+                    action: 'update', 
+                    id: id_registro, 
+                    data: dataToSend 
+                });
+            } else {
+                // AGREGAR:
+                success = await postRecord('proveedores', { 
+                    action: 'add', 
+                    data: dataToSend 
+                });
+            }
+
+            if (success) {
+                alert(`✅ Proveedor ${id_registro ? 'editado' : 'agregado'} correctamente.`);
+                await cargarProveedores();
+                resetFormulario('Proveedor');
+            }
+        }
+
+        function editarProveedor(id) {
+            const p = proveedores.find(item => item.ID == id);
+            if (!p) return;
+
+            registroEnEdicion = p;
+            document.getElementById('tituloProv').textContent = 'Editar Proveedor';
+            document.getElementById('btnGuardarProveedor').textContent = '💾 Guardar Cambios';
+            document.getElementById('cancelarProv').style.display = 'inline-block';
+            
+            // Usamos las cabeceras exactas que devuelve el script (mayúsculas)
+            document.getElementById('provNombre').value = p.Nombre; 
+            document.getElementById('provContacto').value = p.Contacto;
+            document.getElementById('provProductos').value = p.Productos;
+            
+            document.getElementById('proveedores').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        async function eliminarProveedor(id) {
+            if(confirm(`¿Estás seguro de que quieres eliminar este proveedor?`)) {
+                const success = await postRecord('proveedores', { 
+                    action: 'delete', 
+                    id: id 
+                }); 
+                if (success) {
+                    alert('❌ Proveedor eliminado correctamente.');
+                    await cargarProveedores();
+                }
+            }
+        }
+
+        function mostrarProveedores() {
+            const tbody = document.querySelector('#tablaProveedores tbody');
+            tbody.innerHTML = '';
+            proveedores.forEach((p) => {
+                const row = `
+                    <tr>
+                    <td>${p.Nombre}</td>
+                    <td>${p.Contacto}</td>
+                    <td>${p.Productos}</td>
+                    <td>
+                        <div class="action-buttons">
+                        <button class="action-btn edit-btn" onclick="editarProveedor('${p.ID}')">✏️ Editar</button>
+                        <button class="action-btn delete-btn" onclick="eliminarProveedor('${p.ID}')">🗑️ Eliminar</button>
+                        </div>
+                    </td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+            resetFormulario('Proveedor'); 
+        }
+
+        // --------------------------------------------------------------------
+        // --- FUNCIONES DE GASTOS ---
+        // --------------------------------------------------------------------
+
+        async function cargarGastos() {
+            // Asume que las cabeceras son: Fecha, Concepto, Monto, Categoria, ID (en mayúscula)
+            gastos = await fetchRecords('gastos');
+            mostrarGastos();
+        }
+
+        async function guardarGasto() {
+            const fecha = document.getElementById('gastoFecha').value;
+            const concepto = document.getElementById('gastoConcepto').value.trim();
+            // Aseguramos que el monto sea un número para el envío, aunque Apps Script lo maneja bien
+            const monto = parseFloat(document.getElementById('gastoMonto').value); 
+            const categoria = document.getElementById('gastoCategoria').value;
+            
+            if(!fecha || !concepto || isNaN(monto) || monto <= 0) {
+                alert('⚠️ Por favor completa todos los campos con valores válidos');
+                return;
+            }
+
+            let dataToSend = {fecha, concepto, monto, categoria};
+            let success = false;
+            let id_registro = registroEnEdicion ? registroEnEdicion.ID : null;
+
+            if(id_registro) {
+                // EDITAR:
+                success = await postRecord('gastos', { 
+                    action: 'update', 
+                    id: id_registro, 
+                    data: dataToSend 
+                });
+            } else {
+                // AGREGAR:
+                success = await postRecord('gastos', { 
+                    action: 'add', 
+                    data: dataToSend 
+                });
+            }
+            
+            if (success) {
+                alert(`✅ Gasto ${id_registro ? 'editado' : 'agregado'} correctamente.`);
+                await actualizarGastosEIngresos();
+                resetFormulario('Gasto');
+            }
+        }
+
+        function editarGasto(id) {
+            const g = gastos.find(item => item.ID == id);
+            if (!g) return;
+            
+            registroEnEdicion = g;
+            document.getElementById('tituloGasto').textContent = 'Editar Gasto';
+            document.getElementById('btnGuardarGasto').textContent = '💾 Guardar Cambios';
+            document.getElementById('cancelarGasto').style.display = 'inline-block';
+
+            document.getElementById('gastoFecha').value = g.Fecha;
+            document.getElementById('gastoConcepto').value = g.Concepto;
+            document.getElementById('gastoMonto').value = g.Monto;
+            document.getElementById('gastoCategoria').value = g.Categoria;
+            
+            document.getElementById('gastos').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        async function eliminarGasto(id) {
+            if(confirm(`¿Estás seguro de que quieres eliminar este gasto?`)) {
+                const success = await postRecord('gastos', { 
+                    action: 'delete', 
+                    id: id 
+                });
+                if (success) {
+                    alert('❌ Gasto eliminado correctamente.');
+                    await actualizarGastosEIngresos();
+                }
+            }
+        }
+
+        function mostrarGastos() {
+            const tbody = document.querySelector('#tablaGastos tbody');
+            tbody.innerHTML = '';
+            gastos.forEach((g) => {
+                const row = `
+                    <tr>
+                    <td>${g.Fecha}</td>
+                    <td>${g.Concepto}</td>
+                    <td>$${Number(g.Monto).toLocaleString('es-CO')}</td>
+                    <td>${g.Categoria}</td>
+                    <td>
+                        <div class="action-buttons">
+                        <button class="action-btn edit-btn" onclick="editarGasto('${g.ID}')">✏️ Editar</button>
+                        <button class="action-btn delete-btn" onclick="eliminarGasto('${g.ID}')">🗑️ Eliminar</button>
+                        </div>
+                    </td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+            resetFormulario('Gasto');
+        }
+
+        // --------------------------------------------------------------------
+        // --- FUNCIONES DE INGRESOS ---
+        // --------------------------------------------------------------------
+
+        async function cargarIngresos() {
+            // Asume que las cabeceras son: Fecha, Concepto, Monto, Metodo, ID (en mayúscula)
+            ingresos = await fetchRecords('ingresos');
+            mostrarIngresos();
+        }
+
+        async function guardarIngreso() {
+            const fecha = document.getElementById('ingresoFecha').value;
+            const concepto = document.getElementById('ingresoConcepto').value.trim();
+            const monto = parseFloat(document.getElementById('ingresoMonto').value);
+            const metodo = document.getElementById('ingresoMetodo').value;
+            
+            if(!fecha || !concepto || isNaN(monto) || monto <= 0) {
+                alert('⚠️ Por favor completa todos los campos con valores válidos');
+                return;
+            }
+
+            let dataToSend = {fecha, concepto, monto, metodo};
+            let success = false;
+            let id_registro = registroEnEdicion ? registroEnEdicion.ID : null;
+
+            if(id_registro) {
+                // EDITAR:
+                success = await postRecord('ingresos', { 
+                    action: 'update', 
+                    id: id_registro, 
+                    data: dataToSend 
+                });
+            } else {
+                // AGREGAR:
+                success = await postRecord('ingresos', { 
+                    action: 'add', 
+                    data: dataToSend 
+                });
+            }
+
+            if (success) {
+                alert(`✅ Ingreso ${id_registro ? 'editado' : 'agregado'} correctamente.`);
+                await actualizarGastosEIngresos();
+                resetFormulario('Ingreso');
+            }
+        }
+
+        function editarIngreso(id) {
+            const i = ingresos.find(item => item.ID == id);
+            if (!i) return;
+
+            registroEnEdicion = i;
+            document.getElementById('tituloIngreso').textContent = 'Editar Ingreso';
+            document.getElementById('btnGuardarIngreso').textContent = '💾 Guardar Cambios';
+            document.getElementById('cancelarIngreso').style.display = 'inline-block';
+
+            document.getElementById('ingresoFecha').value = i.Fecha;
+            document.getElementById('ingresoConcepto').value = i.Concepto;
+            document.getElementById('ingresoMonto').value = i.Monto;
+            document.getElementById('ingresoMetodo').value = i.Metodo;
+            
+            document.getElementById('ingresos').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        async function eliminarIngreso(id) {
+            if(confirm(`¿Estás seguro de que quieres eliminar este ingreso?`)) {
+                const success = await postRecord('ingresos', { 
+                    action: 'delete', 
+                    id: id 
+                });
+                if (success) {
+                    alert('❌ Ingreso eliminado correctamente.');
+                    await actualizarGastosEIngresos();
+                }
+            }
+        }
+
+        function mostrarIngresos() {
+            const tbody = document.querySelector('#tablaIngresos tbody');
+            tbody.innerHTML = '';
+            ingresos.forEach((i) => {
+                const row = `
+                    <tr>
+                    <td>${i.Fecha}</td>
+                    <td>${i.Concepto}</td>
+                    <td>$${Number(i.Monto).toLocaleString('es-CO')}</td>
+                    <td>${i.Metodo}</td>
+                    <td>
+                        <div class="action-buttons">
+                        <button class="action-btn edit-btn" onclick="editarIngreso('${i.ID}')">✏️ Editar</button>
+                        <button class="action-btn delete-btn" onclick="eliminarIngreso('${i.ID}')">🗑️ Eliminar</button>
+                        </div>
+                    </td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+            resetFormulario('Ingreso');
+        }
+
+        // --------------------------------------------------------------------
+        // --- RESUMEN Y EXCEL ---
+        // --------------------------------------------------------------------
+
+        function actualizarResumen() {
+            // Usamos la propiedad 'Monto' del JSON retornado (que es un String o Number)
+            const totalGastos = gastos.reduce((sum, g) => sum + (Number(g.Monto) || 0), 0);
+            const totalIngresos = ingresos.reduce((sum, i) => sum + (Number(i.Monto) || 0), 0);
+            const balance = totalIngresos - totalGastos;
+
+            document.getElementById('totalGastos').innerText = `$${totalGastos.toLocaleString('es-CO')}`;
+            document.getElementById('totalIngresos').innerText = `$${totalIngresos.toLocaleString('es-CO')}`;
+            document.getElementById('balance').innerText = `$${balance.toLocaleString('es-CO')}`;
+
+            const ctx = document.getElementById('graficoResumen').getContext('2d');
+            if(window.miGrafico) window.miGrafico.destroy();
+            window.miGrafico = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Gastos', 'Ingresos', 'Balance'],
+                    datasets: [{
+                        label: 'Monto ($)',
+                        data: [totalGastos, totalIngresos, balance],
+                        backgroundColor: ['#f36ca7', '#36a2f7', balance >= 0 ? '#34eb7a' : '#ff6384'] 
+                    }]
+                },
+                options: { 
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: { 
+                        legend: { display: true },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return '$' + context.parsed.y.toLocaleString('es-CO');
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + value.toLocaleString('es-CO');
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Exportar Excel
+        function exportExcel() {
+            if(proveedores.length === 0 && gastos.length === 0 && ingresos.length === 0) {
+                alert('⚠️ No hay datos para exportar');
+                return;
+            }
+            
+            const wb = XLSX.utils.book_new();
+            // Mapeo directo a los nombres de las cabeceras de Google Sheets
+            const p_export = proveedores.map(p => ({Nombre: p.Nombre, Contacto: p.Contacto, 'Productos/Servicios': p.Productos}));
+            const g_export = gastos.map(g => ({Fecha: g.Fecha, Concepto: g.Concepto, Monto: g.Monto, Categoría: g.Categoria}));
+            const i_export = ingresos.map(i => ({Fecha: i.Fecha, Concepto: i.Concepto, Monto: i.Monto, Método: i.Metodo}));
+
+            XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(p_export), "Proveedores");
+            XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(g_export), "Gastos");
+            XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(i_export), "Ingresos");
+            XLSX.writeFile(wb, "contabilidad_frutos_del_paraiso.xlsx");
+            alert('✅ Excel exportado correctamente');
+        }
+
+        // Cargar datos al iniciar
+        async function init() {
+            // Cargar todos los datos desde Google Sheets
+            await cargarProveedores();
+            await cargarGastos();
+            await cargarIngresos();
+
+            // Inicializar UI
+            actualizarResumen();
+            
+            // Asegurar que se cargue la fecha de hoy por defecto en los formularios de fecha
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('gastoFecha').value = today;
+            document.getElementById('ingresoFecha').value = today;
+        }
+
+        init();
+    </script>
 </body>
 </html>

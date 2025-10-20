@@ -1,8 +1,9 @@
-/* estilos.css - versión final con método de pago integrado */
+/* estilos.css - versión final con Caveat para el título (Fresco y Natural) */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  /* La fuente principal del cuerpo sigue siendo Roboto por defecto */
   font-family: 'Roboto', sans-serif;
 }
 
@@ -51,6 +52,8 @@ section {
 
 section h2 {
   color: #ff9fbf;
+  /* Encabezados de sección con Poppins (moderno) */
+  font-family: 'Poppins', sans-serif; 
   font-size: 2rem;
   margin-bottom: 1.5rem;
 }
@@ -65,8 +68,10 @@ header {
 }
 
 header h1 {
-  font-family: 'Pacifico', cursive;
-  font-size: 2.5rem;
+  /* *** NUEVO CAMBIO DE FUENTE AQUÍ: Caveat (Escritura a mano, fresco, natural) *** */
+  font-family: 'Caveat', cursive; 
+  font-size: 3.5rem; /* Más grande para destacar */
+  font-weight: 700; /* Negrita para más impacto */
   margin-bottom: 0.5rem;
   text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
 }
@@ -271,7 +276,7 @@ footer p {
   }
 
   header h1 {
-    font-size: 2rem;
+    font-size: 3rem; /* Ajuste para que se vea bien en móvil */
   }
 
   header nav {
@@ -386,7 +391,7 @@ footer p {
 
 #versiculo-diario h2 {
   color: #ff9fbf;
-  font-family: 'Pacifico', cursive;
+  font-family: 'Poppins', sans-serif; 
   margin-bottom: 1rem;
 }
 
