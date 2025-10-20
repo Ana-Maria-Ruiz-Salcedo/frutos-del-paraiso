@@ -199,13 +199,17 @@
 
     /* Frase del día */
     #frase-dia {
-      font-size: 16px;
-      padding: 15px;
-      border: 1px solid #ddd;
+      font-size: 18px;
+      padding: 20px;
+      border: 2px solid #f9c5db;
       border-radius: 10px;
       margin-bottom: 15px;
-      min-height: 60px;
-      background-color: #fff5f8;
+      min-height: 80px;
+      background: linear-gradient(135deg, #fff5f8, #ffe3ec);
+      color: #333;
+      font-weight: 500;
+      text-align: center;
+      line-height: 1.6;
     }
 
     .volver {
@@ -214,6 +218,13 @@
       color: #e6659f;
       text-decoration: none;
       font-weight: bold;
+    }
+
+    /* Loading */
+    .loading {
+      text-align: center;
+      color: #e6659f;
+      padding: 20px;
     }
 
     /* Desktop */
@@ -309,7 +320,7 @@
     <h2>Administrador</h2>
     <button onclick="window.location.href='index.html'">← Volver al inicio</button>
     <button onclick="mostrarSeccion('productos'); cerrarMenuMobile()">Productos</button>
-    <button onclick="mostrarSeccion('frase'); cerrarMenuMobile()">Frase del Día</button>
+    <button onclick="mostrarSeccion('frase'); cerrarMenuMobile()">Versículo del Día</button>
     <button onclick="window.location.href='admin-contabilidad.html'">Contabilidad</button>
   </nav>
 
@@ -333,7 +344,8 @@
         <p id="mensaje"></p>
 
         <h2>Lista de Productos</h2>
-        <div class="tabla-wrapper">
+        <div class="loading" id="loading-productos">Cargando productos...</div>
+        <div class="tabla-wrapper" id="tabla-productos-wrapper" style="display:none;">
           <table id="tabla-productos">
             <thead>
               <tr>
@@ -354,38 +366,53 @@
     <!-- Sección Frase del Día -->
     <div id="frase" class="seccion-admin">
       <div class="container">
-        <h2>Frase del Día</h2>
-        <div id="frase-dia"></div>
-        <textarea id="frase-input" placeholder="Escribe la frase del día aquí"></textarea>
-        <button class="form-btn" onclick="guardarFrase()">Guardar Frase</button>
+        <h2>✨ Versículo del día ✨</h2>
+        <p style="margin-bottom: 15px; color: #666;">Esto es lo que actualmente se muestra en el inicio:</p>
+        <div class="loading" id="loading-frase">Cargando versículo...</div>
+        <div id="frase-dia" style="display:none;"></div>
+        <hr style="margin: 20px 0; border: none; border-top: 2px solid #f9c5db;">
+        <h3 style="font-size: 18px; color: #e6659f; margin-bottom: 10px;">Editar versículo</h3>
+        <textarea id="frase-input" placeholder="Escribe el versículo del día aquí"></textarea>
+        <button class="form-btn" onclick="guardarFrase()">💾 Guardar Versículo</button>
+        <button class="form-btn" onclick="borrarFrase()" style="background-color: #f44336;">🗑️ Borrar Versículo</button>
       </div>
     </div>
   </div>
 
   <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbz5vp7lao0lJfxNIunQ6OWj1J000hzsQKkA-eR8y1OTGuOW3QbX_g69n8NyegCse06e/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbziL8UlEnd0uK7GJAOOHoY2SxewrNFxYfkNl4QFzB6ajDfizL9nvJcgAZ-x-Y7nGwXT/exec";
     let editando = false;
 
     // ---------- FUNCIONES PRODUCTOS ----------
     async function cargarProductos() {
-      const res = await fetch(API_URL);
-      const productos = await res.json();
-      const tbody = document.querySelector("#tabla-productos tbody");
-      tbody.innerHTML = "";
-      productos.forEach(p => {
-        const fila = `
-          <tr>
-            <td>${p.id}</td>
-            <td>${p.name}</td>
-            <td>$${p.price}</td>
-            <td>${p.available}</td>
-            <td class="acciones">
-              <button onclick='editarProducto(${JSON.stringify(p)})'>✏️ Editar</button>
-              <button onclick='eliminarProducto(${JSON.stringify(p.id)})'>🗑️ Eliminar</button>
-            </td>
-          </tr>`;
-        tbody.insertAdjacentHTML("beforeend", fila);
-      });
+      try {
+        const res = await fetch(API_URL);
+        const productos = await res.json();
+        
+        const tbody = document.querySelector("#tabla-productos tbody");
+        tbody.innerHTML = "";
+        
+        productos.forEach(p => {
+          const fila = `
+            <tr>
+              <td>${p.id}</td>
+              <td>${p.name}</td>
+              <td>$${Number(p.price).toLocaleString('es-CO')}</td>
+              <td>${p.available}</td>
+              <td class="acciones">
+                <button onclick='editarProducto(${JSON.stringify(p)})'>✏️ Editar</button>
+                <button onclick='eliminarProducto(${JSON.stringify(p.id)})'>🗑️ Eliminar</button>
+              </td>
+            </tr>`;
+          tbody.insertAdjacentHTML("beforeend", fila);
+        });
+        
+        document.getElementById('loading-productos').style.display = 'none';
+        document.getElementById('tabla-productos-wrapper').style.display = 'block';
+      } catch(error) {
+        document.getElementById('loading-productos').textContent = '⚠️ Error al cargar productos';
+        console.error(error);
+      }
     }
 
     async function agregarProducto() {
@@ -402,13 +429,25 @@
       }
 
       const producto = { id, name, description, price, image_url, available, edit: editando };
-      const res = await fetch(API_URL, { method: "POST", body: JSON.stringify(producto) });
-      const texto = await res.text();
-      if (texto.includes("OK")) {
-        mostrarMensaje(editando ? "✅ Producto actualizado." : "✅ Producto agregado correctamente.", "green");
-        resetFormulario();
-        cargarProductos();
-      } else mostrarMensaje("⚠️ Error al guardar el producto.", "red");
+      
+      try {
+        const res = await fetch(API_URL, { 
+          method: "POST", 
+          body: JSON.stringify(producto) 
+        });
+        const texto = await res.text();
+        
+        if (texto.includes("OK")) {
+          mostrarMensaje(editando ? "✅ Producto actualizado." : "✅ Producto agregado correctamente.", "green");
+          resetFormulario();
+          cargarProductos();
+        } else {
+          mostrarMensaje("⚠️ Error al guardar el producto.", "red");
+        }
+      } catch(error) {
+        mostrarMensaje("⚠️ Error de conexión.", "red");
+        console.error(error);
+      }
     }
 
     function editarProducto(p) {
@@ -423,7 +462,6 @@
       document.getElementById("image_url").value = p.image_url;
       document.getElementById("available").value = (p.available.toLowerCase() === "yes" || p.available.toLowerCase() === "sí") ? "yes" : "no";
       
-      // Scroll al formulario
       document.getElementById("titulo-form").scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
@@ -447,12 +485,24 @@
 
     async function eliminarProducto(id) {
       if (!confirm("¿Seguro que deseas eliminar este producto?")) return;
-      const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ id, delete: true }) });
-      const texto = await res.text();
-      if (texto.includes("OK")) {
-        mostrarMensaje("🗑️ Producto eliminado.", "orange");
-        cargarProductos();
-      } else mostrarMensaje("⚠️ Error al eliminar el producto.", "red");
+      
+      try {
+        const res = await fetch(API_URL, { 
+          method: "POST", 
+          body: JSON.stringify({ id, delete: true }) 
+        });
+        const texto = await res.text();
+        
+        if (texto.includes("OK")) {
+          mostrarMensaje("🗑️ Producto eliminado.", "orange");
+          cargarProductos();
+        } else {
+          mostrarMensaje("⚠️ Error al eliminar el producto.", "red");
+        }
+      } catch(error) {
+        mostrarMensaje("⚠️ Error de conexión.", "red");
+        console.error(error);
+      }
     }
 
     function mostrarMensaje(texto, color) {
@@ -466,7 +516,74 @@
       }, 3000);
     }
 
-    cargarProductos();
+    // ---------- FUNCIONES FRASE DEL DÍA ----------
+    async function cargarFrase() {
+      try {
+        const res = await fetch(`${API_URL}?sheet=frase`);
+        const data = await res.json();
+        
+        // Mostrar exactamente lo que se muestra en el index
+        const frase = data.frase || "Cargando mensaje...";
+        document.getElementById("frase-dia").textContent = frase;
+        
+        // En el textarea mostrar el contenido real (vacío si está vacío)
+        document.getElementById("frase-input").value = data.frase || "";
+        
+        document.getElementById('loading-frase').style.display = 'none';
+        document.getElementById('frase-dia').style.display = 'block';
+      } catch(error) {
+        document.getElementById('loading-frase').textContent = '⚠️ Error al cargar versículo';
+        document.getElementById('frase-dia').textContent = 'Cargando mensaje...';
+        document.getElementById('frase-dia').style.display = 'block';
+        console.error(error);
+      }
+    }
+
+    async function guardarFrase() {
+      const texto = document.getElementById("frase-input").value.trim();
+      if (!texto) return alert("Escribe un versículo antes de guardar.");
+      
+      try {
+        const res = await fetch(API_URL, {
+          method: "POST",
+          body: JSON.stringify({ sheet: 'frase', frase: texto })
+        });
+        const data = await res.json();
+        
+        if (data.success) {
+          document.getElementById("frase-dia").textContent = texto;
+          alert("✅ Versículo del día guardado en Google Sheets.");
+        } else {
+          alert("⚠️ Error al guardar el versículo.");
+        }
+      } catch(error) {
+        alert("⚠️ Error de conexión.");
+        console.error(error);
+      }
+    }
+
+    async function borrarFrase() {
+      if (!confirm("¿Estás segura de borrar el versículo del día? Volverá al mensaje predeterminado.")) return;
+      
+      try {
+        const res = await fetch(API_URL, {
+          method: "POST",
+          body: JSON.stringify({ sheet: 'frase', frase: '' })
+        });
+        const data = await res.json();
+        
+        if (data.success) {
+          document.getElementById("frase-dia").textContent = "Cargando mensaje...";
+          document.getElementById("frase-input").value = "";
+          alert("🗑️ Versículo del día borrado. Ahora muestra el mensaje predeterminado.");
+        } else {
+          alert("⚠️ Error al borrar el versículo.");
+        }
+      } catch(error) {
+        alert("⚠️ Error de conexión.");
+        console.error(error);
+      }
+    }
 
     // ---------- MENÚ RESPONSIVE ----------
     function toggleMenu() {
@@ -485,26 +602,15 @@
     function mostrarSeccion(seccion) {
       document.querySelectorAll('.seccion-admin').forEach(s => s.classList.remove('active'));
       document.getElementById(seccion).classList.add('active');
+      
+      // Cargar datos al cambiar de sección
+      if (seccion === 'frase') {
+        cargarFrase();
+      }
     }
 
-    // ---------- FUNCIONES FRASE DEL DÍA ----------
-    const FRASE_KEY = "fraseDelDia";
-
-    function cargarFrase() {
-      const frase = localStorage.getItem(FRASE_KEY) || "Aquí aparecerá la frase del día.";
-      document.getElementById("frase-dia").textContent = frase;
-    }
-
-    function guardarFrase() {
-      const texto = document.getElementById("frase-input").value.trim();
-      if (!texto) return alert("Escribe una frase antes de guardar.");
-      localStorage.setItem(FRASE_KEY, texto);
-      document.getElementById("frase-dia").textContent = texto;
-      document.getElementById("frase-input").value = "";
-      alert("✅ Frase del día guardada.");
-    }
-
-    cargarFrase();
+    // Cargar datos al iniciar
+    cargarProductos();
   </script>
 </body>
 </html>
